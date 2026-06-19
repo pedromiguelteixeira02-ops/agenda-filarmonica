@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agenda Filarmónica</title>
+<title>Agenda Filarmónica PRO</title>
 
 <style>
 :root{
@@ -108,7 +108,16 @@ input,select,textarea{
   padding:7px;
 }
 
-/* LISTAS */
+/* SLIDER */
+.sliderBox{
+  margin:10px 0;
+}
+#valueLabel{
+  font-weight:bold;
+  margin-bottom:5px;
+}
+
+/* STATS */
 .section{
   padding:10px;
 }
@@ -127,7 +136,7 @@ input,select,textarea{
 <body>
 
 <header>
-<h1>🎼 Agenda Filarmónica</h1>
+<h1>🎼 Agenda Filarmónica PRO</h1>
 <button onclick="toggleTheme()">🌓</button>
 </header>
 
@@ -145,6 +154,12 @@ input,select,textarea{
 
 <!-- CALENDÁRIO -->
 <div id="calendar"></div>
+
+<!-- TOTAL MÊS -->
+<div class="section">
+<h3>💰 Total deste mês</h3>
+<div id="monthTotal"></div>
+</div>
 
 <!-- PRÓXIMOS -->
 <div class="section">
@@ -183,50 +198,36 @@ input,select,textarea{
 
 <input id="location" placeholder="Localização">
 
-<select id="value">
-<option>0</option>
-<option>20</option>
-<option>40</option>
-<option selected>60</option>
-<option>80</option>
-<option>100</option>
-<option>120</option>
-<option>140</option>
-<option>160</option>
-<option>180</option>
-<option>200</option>
-</select>
+<!-- SLIDER DE VALOR -->
+<div class="sliderBox">
+<div id="valueLabel">Valor: 60€</div>
+<input type="range" id="value" min="20" max="150" step="5" value="60"
+oninput="updateSlider(this.value)">
+</div>
 
 <button onclick="save()">Guardar</button>
-<button onclick="closeModal()" style="background:#555;color:white">Fechar</button>
+<button onclick="closeModal()">Fechar</button>
 
 </div>
 </div>
 
 <script>
 
-/* =========================
+/* ======================
    STORAGE
-========================= */
+====================== */
 let data = JSON.parse(localStorage.getItem("agenda_filarmonica") || "{}");
 let events = data.events || [];
 
-/* =========================
-   INIT DATE
-========================= */
+/* ======================
+   DATE INIT
+====================== */
 let now = new Date();
-let currentMonth = now.getMonth();
-let currentYear = now.getFullYear();
-
-/* =========================
-   SELECTS
-========================= */
-const monthSel = document.getElementById("month");
-const yearSel = document.getElementById("year");
+let monthSel=document.getElementById("month");
+let yearSel=document.getElementById("year");
 
 const meses=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
 
-/* meses */
 meses.forEach((m,i)=>{
 let o=document.createElement("option");
 o.value=i;
@@ -234,32 +235,37 @@ o.textContent=m;
 monthSel.appendChild(o);
 });
 
-/* anos */
 for(let y=2024;y<=2035;y++){
 let o=document.createElement("option");
 o.value=y;
 o.textContent=y;
 yearSel.appendChild(o);
+});
+
+monthSel.value=now.getMonth();
+yearSel.value=now.getFullYear();
+
+/* ======================
+   SLIDER
+====================== */
+function updateSlider(val){
+document.getElementById("valueLabel").innerText="Valor: "+val+"€";
 }
 
-/* set default */
-monthSel.value=currentMonth;
-yearSel.value=currentYear;
-
-/* =========================
+/* ======================
    RENDER
-========================= */
+====================== */
 function render(){
 
-currentMonth=parseInt(monthSel.value);
-currentYear=parseInt(yearSel.value);
+let m=parseInt(monthSel.value);
+let y=parseInt(yearSel.value);
 
 let cal=document.getElementById("calendar");
 cal.innerHTML="";
 
-let first=new Date(currentYear,currentMonth,1);
+let first=new Date(y,m,1);
 let start=first.getDay();
-let days=new Date(currentYear,currentMonth+1,0).getDate();
+let days=new Date(y,m+1,0).getDate();
 
 /* empty */
 for(let i=0;i<start;i++){
@@ -269,7 +275,7 @@ cal.innerHTML+="<div class='empty'></div>";
 /* days */
 for(let d=1;d<=days;d++){
 
-let date=`${currentYear}-${String(currentMonth+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+let date=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
 
 let div=document.createElement("div");
 div.className="day";
@@ -278,11 +284,11 @@ div.innerHTML="<b>"+d+"</b>";
 events.filter(e=>e.date===date).forEach(e=>{
 let ev=document.createElement("div");
 
-let color="blue";
-if(e.band.includes("Figueiredo")) color="green";
-if(e.band==="Outros") color="orange";
+let c="blue";
+if(e.band.includes("Figueiredo")) c="green";
+if(e.band==="Outros") c="orange";
 
-ev.className="event "+color;
+ev.className="event "+c;
 ev.innerText=e.band;
 
 div.appendChild(ev);
@@ -293,13 +299,32 @@ div.onclick=()=>openModal(date);
 cal.appendChild(div);
 }
 
+renderMonthTotal();
 renderNext();
 renderStats();
 }
 
-/* =========================
+/* ======================
+   TOTAL MÊS
+====================== */
+function renderMonthTotal(){
+
+let m=parseInt(monthSel.value);
+let y=parseInt(yearSel.value);
+
+let total=events
+.filter(e=>{
+let d=new Date(e.date);
+return d.getMonth()==m && d.getFullYear()==y;
+})
+.reduce((a,b)=>a+(b.value||0),0);
+
+document.getElementById("monthTotal").innerHTML="€ "+total;
+}
+
+/* ======================
    MODAL
-========================= */
+====================== */
 function openModal(date){
 document.getElementById("modal").style.display="flex";
 document.getElementById("date").value=date;
@@ -309,9 +334,9 @@ function closeModal(){
 document.getElementById("modal").style.display="none";
 }
 
-/* =========================
+/* ======================
    SAVE
-========================= */
+====================== */
 function save(){
 
 let band=document.getElementById("band").value;
@@ -333,69 +358,52 @@ closeModal();
 render();
 }
 
-/* =========================
-   NEXT EVENTS
-========================= */
+/* ======================
+   NEXT
+====================== */
 function renderNext(){
-
 let div=document.getElementById("next");
 div.innerHTML="";
 
-events
-.sort((a,b)=>a.date.localeCompare(b.date))
+events.sort((a,b)=>a.date.localeCompare(b.date))
 .slice(0,5)
 .forEach(e=>{
 div.innerHTML+=`<div class="card">${e.date} - ${e.band} - €${e.value}</div>`;
 });
 }
 
-/* =========================
+/* ======================
    STATS
-========================= */
+====================== */
 function renderStats(){
 
 let total=events.length;
-let serv=events.filter(e=>e.type==="Serviço").length;
-let ens=events.filter(e=>e.type==="Ensaio").length;
 let money=events.reduce((a,b)=>a+(b.value||0),0);
 
 document.getElementById("stats").innerHTML=`
 Total eventos: ${total}<br>
-Serviços: ${serv}<br>
-Ensaios: ${ens}<br>
-Total ganho: €${money}
+Total geral: €${money}
 `;
 }
 
-/* =========================
+/* ======================
    NAV
-========================= */
+====================== */
 function prevMonth(){
 monthSel.value--;
-if(monthSel.value<0){
-monthSel.value=11;
-yearSel.value--;
-}
+if(monthSel.value<0){monthSel.value=11;yearSel.value--;}
 render();
 }
 
 function nextMonth(){
 monthSel.value++;
-if(monthSel.value>11){
-monthSel.value=0;
-yearSel.value++;
-}
+if(monthSel.value>11){monthSel.value=0;yearSel.value++;}
 render();
 }
 
-/* =========================
-   THEME
-========================= */
-function toggleTheme(){
-document.body.classList.toggle("dark");
-}
-
-/* START */
+/* ======================
+   INIT
+====================== */
 render();
 
 </script>
