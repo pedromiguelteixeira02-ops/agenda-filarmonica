@@ -38,9 +38,10 @@ input,select,textarea{width:100%;margin:5px 0;padding:6px;}
 <h3>Novo Evento</h3>
 
 <select id="band">
-<option>Sociedade Artística Banda de Vale de Cambra</option>
-<option>Banda Musical de Figueiredo</option>
-<option>Outros</option>
+  <option disabled selected>Seleciona a banda</option>
+  <option value="Sociedade Artística Banda de Vale de Cambra">Sociedade Artística Banda de Vale de Cambra</option>
+  <option value="Banda Musical de Figueiredo">Banda Musical de Figueiredo</option>
+  <option value="Outros">Outros</option>
 </select>
 
 <input id="other" placeholder="Outra banda">
@@ -53,7 +54,7 @@ input,select,textarea{width:100%;margin:5px 0;padding:6px;}
 <input type="time" id="start">
 <input type="time" id="end">
 <input id="location" placeholder="Local">
-<input type="number" id="value" value="60">
+<select id="value">   <option value="0">0 €</option>   <option value="20">20 €</option>   <option value="40">40 €</option>   <option value="60" selected>60 €</option>   <option value="80">80 €</option>   <option value="100">100 €</option>   <option value="120">120 €</option>   <option value="140">140 €</option>   <option value="160">160 €</option>   <option value="180">180 €</option>   <option value="200">200 €</option> </select>
 
 <textarea id="notes" placeholder="Notas"></textarea>
 
@@ -63,7 +64,7 @@ input,select,textarea{width:100%;margin:5px 0;padding:6px;}
 </div>
 
 <script>
-let events=JSON.parse(localStorage.getItem("ev")||"[]");
+let saved = JSON.parse(localStorage.getItem("agenda_filarmonica_data") || "{}"); let events = saved.events || [];
 
 function render(){
 let cal=document.getElementById("cal");
@@ -110,7 +111,7 @@ value:document.getElementById("value").value,
 notes:document.getElementById("notes").value
 });
 
-localStorage.setItem("ev",JSON.stringify(events));
+function saveData(){   const data = {     events,     savedAt: new Date().toISOString()   };   localStorage.setItem("agenda_filarmonica_data", JSON.stringify(data)); }
 closeModal();
 render();
 }
