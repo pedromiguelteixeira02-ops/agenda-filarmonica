@@ -33,6 +33,15 @@ select,button,input{
   border-radius:6px;
 }
 
+#weekdays{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  padding:0 10px;
+  font-size:12px;
+  font-weight:bold;
+  text-align:center;
+}
+
 #calendar{
   display:grid;
   grid-template-columns:repeat(7,1fr);
@@ -85,13 +94,17 @@ input,select{
   padding:6px;
 }
 
-/* SLIDER */
-.sliderBox{
-  margin:10px 0;
+/* SECTIONS */
+.section{
+  padding:10px;
 }
 
-#valueLabel{
-  font-weight:bold;
+.card{
+  background:white;
+  padding:8px;
+  margin:5px 0;
+  border-radius:8px;
+  font-size:13px;
 }
 </style>
 </head>
@@ -102,6 +115,7 @@ input,select{
 <h3>🎼 Agenda Filarmónica</h3>
 </header>
 
+<!-- CONTROLOS -->
 <div class="controls">
 <button onclick="prevMonth()">◀</button>
 
@@ -111,12 +125,30 @@ input,select{
 <button onclick="nextMonth()">▶</button>
 </div>
 
-<!-- 💰 TOTAL MÊS -->
-<div style="padding:10px">
-<b>💰 Total deste mês:</b> <span id="monthTotal">0€</span>
+<!-- DIAS SEMANA -->
+<div id="weekdays">
+<div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div><div>Dom</div>
 </div>
 
+<!-- CALENDÁRIO -->
 <div id="calendar"></div>
+
+<!-- TOTALS -->
+<div class="section">
+<h3>💰 Total geral (todos os meses)</h3>
+<div id="totalAll"></div>
+</div>
+
+<div class="section">
+<h3>💰 Total do mês</h3>
+<div id="monthTotal"></div>
+</div>
+
+<!-- PRÓXIMOS -->
+<div class="section">
+<h3>📋 Próximos eventos</h3>
+<div id="next"></div>
+</div>
 
 <!-- MODAL -->
 <div id="modal">
@@ -135,11 +167,11 @@ input,select{
 <input type="date" id="date">
 <input type="time" id="start">
 <input type="time" id="end">
+
 <input id="location" placeholder="Localização">
 
-<!-- 💶 SLIDER -->
-<div class="sliderBox">
-<div id="valueLabel">Valor: 60€</div>
+<div>
+<b>Valor: </b> <span id="valueLabel">60€</span>
 <input type="range" id="value" min="20" max="150" step="5" value="60"
 oninput="updateSlider(this.value)">
 </div>
@@ -187,7 +219,7 @@ yearSel.value=y;
    SLIDER
 ====================== */
 function updateSlider(v){
-document.getElementById("valueLabel").innerText="Valor: "+v+"€";
+document.getElementById("valueLabel").innerText=v+"€";
 }
 
 /* ======================
@@ -230,6 +262,8 @@ cal.appendChild(div);
 }
 
 renderMonthTotal();
+renderAllTotal();
+renderNext();
 }
 
 /* ======================
@@ -244,7 +278,31 @@ return d.getMonth()==m && d.getFullYear()==y;
 })
 .reduce((a,b)=>a+(b.value||0),0);
 
-document.getElementById("monthTotal").innerText = total + "€";
+document.getElementById("monthTotal").innerText=total+"€";
+}
+
+/* ======================
+   TOTAL GLOBAL
+====================== */
+function renderAllTotal(){
+let total = events.reduce((a,b)=>a+(b.value||0),0);
+document.getElementById("totalAll").innerText=total+"€";
+}
+
+/* ======================
+   PRÓXIMOS EVENTOS
+====================== */
+function renderNext(){
+
+let div=document.getElementById("next");
+div.innerHTML="";
+
+events
+.sort((a,b)=>a.date.localeCompare(b.date))
+.slice(0,5)
+.forEach(e=>{
+div.innerHTML+=`<div class="card">${e.date} - ${e.band} - €${e.value}</div>`;
+});
 }
 
 /* ======================
