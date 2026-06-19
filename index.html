@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agenda Filarmónica</title>
+<title>Agenda Filarmónica PRO</title>
 
 <style>
 :root{
@@ -11,13 +11,13 @@
   --card:#fff;
   --text:#222;
   --primary:#2b6cb0;
-  --shadow:0 2px 8px rgba(0,0,0,0.1);
+  --shadow:0 2px 10px rgba(0,0,0,0.1);
 }
 
 body.dark{
-  --bg:#1a202c;
-  --card:#2d3748;
-  --text:#f7fafc;
+  --bg:#121826;
+  --card:#1f2937;
+  --text:#f9fafb;
 }
 
 body{
@@ -37,11 +37,18 @@ header{
   box-shadow:var(--shadow);
 }
 
-header h1{
-  font-size:16px;
+/* CONTROLS */
+.controls{
   display:flex;
-  gap:8px;
-  align-items:center;
+  gap:5px;
+  justify-content:center;
+  padding:10px;
+}
+
+button,select,input{
+  padding:6px;
+  border-radius:6px;
+  border:none;
 }
 
 /* CALENDAR */
@@ -54,7 +61,7 @@ header h1{
 
 .day{
   background:var(--card);
-  min-height:70px;
+  min-height:75px;
   padding:5px;
   border-radius:8px;
   box-shadow:var(--shadow);
@@ -62,62 +69,51 @@ header h1{
   cursor:pointer;
 }
 
+.empty{background:transparent;box-shadow:none;}
+
 .event{
-  background:#2b6cb0;
-  color:white;
   font-size:10px;
-  padding:2px;
   margin-top:2px;
+  padding:2px;
   border-radius:4px;
+  color:white;
 }
 
-/* SECTIONS */
-.section{
-  padding:10px;
-}
-
-.card{
-  background:var(--card);
-  padding:10px;
-  margin:5px 0;
-  border-radius:8px;
-  box-shadow:var(--shadow);
-  font-size:13px;
-}
+.blue{background:#2563eb;}
+.green{background:#16a34a;}
+.orange{background:#f97316;}
 
 /* MODAL */
 #modal{
   position:fixed;
   top:0;left:0;
   width:100%;height:100%;
-  background:rgba(0,0,0,0.5);
+  background:rgba(0,0,0,0.6);
   display:none;
   align-items:center;
   justify-content:center;
 }
 
-.modal-box{
+.box{
   background:var(--card);
   padding:15px;
-  width:90%;
-  max-width:400px;
-  border-radius:10px;
+  width:92%;
+  max-width:420px;
+  border-radius:12px;
 }
 
-input,select,textarea{
-  width:100%;
-  margin:5px 0;
-  padding:7px;
+/* LIST */
+.section{
+  padding:10px;
 }
 
-button{
+.card{
+  background:var(--card);
   padding:8px;
   margin:5px 0;
-  width:100%;
-  border:none;
-  border-radius:6px;
-  background:var(--primary);
-  color:white;
+  border-radius:8px;
+  box-shadow:var(--shadow);
+  font-size:13px;
 }
 </style>
 </head>
@@ -125,40 +121,57 @@ button{
 <body>
 
 <header>
-<h1>🎼 Agenda Filarmónica</h1>
+<h1>🎼 Agenda PRO</h1>
 <button onclick="toggleTheme()">🌓</button>
 </header>
 
-<div id="calendar"></div>
+<!-- CONTROLOS -->
+<div class="controls">
+<button onclick="prevMonth()">◀</button>
 
-<div class="section">
-<h3>Próximos eventos</h3>
-<div id="next"></div>
+<select id="month" onchange="render()"></select>
+<select id="year" onchange="render()"></select>
+
+<button onclick="nextMonth()">▶</button>
 </div>
 
+<!-- SEARCH -->
+<div class="section">
+<input id="search" placeholder="Pesquisar..." oninput="render()">
+</div>
+
+<!-- CALENDAR -->
+<div id="calendar"></div>
+
+<!-- STATS -->
 <div class="section">
 <h3>Estatísticas</h3>
 <div id="stats"></div>
 </div>
 
+<!-- NEXT EVENTS -->
+<div class="section">
+<h3>Próximos eventos</h3>
+<div id="next"></div>
+</div>
+
 <!-- MODAL -->
 <div id="modal">
-<div class="modal-box">
+<div class="box">
 
-<h3>Novo Evento</h3>
+<h3 id="modalTitle">Novo Evento</h3>
 
 <select id="band">
-  <option disabled selected>Seleciona a banda</option>
-  <option>Sociedade Artística Banda de Vale de Cambra</option>
-  <option>Banda Musical de Figueiredo</option>
-  <option>Outros</option>
+<option>Sociedade Artística Banda de Vale de Cambra</option>
+<option>Banda Musical de Figueiredo</option>
+<option>Outros</option>
 </select>
 
-<input id="other" placeholder="Outra banda (se necessário)">
+<input id="other" placeholder="Outra banda">
 
 <select id="type">
-  <option>Serviço</option>
-  <option>Ensaio</option>
+<option>Serviço</option>
+<option>Ensaio</option>
 </select>
 
 <input type="date" id="date">
@@ -166,27 +179,27 @@ button{
 <input type="time" id="end">
 
 <input id="location" placeholder="Localização">
-<input id="second" placeholder="Segunda banda (opcional)">
+<input id="second" placeholder="Segunda banda">
 
-<!-- VALOR 5 EM 5 -->
 <select id="value">
-  <option>0</option>
-  <option>20</option>
-  <option>40</option>
-  <option selected>60</option>
-  <option>80</option>
-  <option>100</option>
-  <option>120</option>
-  <option>140</option>
-  <option>160</option>
-  <option>180</option>
-  <option>200</option>
+<option>0</option>
+<option>20</option>
+<option>40</option>
+<option selected>60</option>
+<option>80</option>
+<option>100</option>
+<option>120</option>
+<option>140</option>
+<option>160</option>
+<option>180</option>
+<option>200</option>
 </select>
 
 <textarea id="notes" placeholder="Notas"></textarea>
 
 <button onclick="save()">Guardar</button>
-<button onclick="closeModal()" style="background:#718096">Fechar</button>
+<button onclick="removeEvent()" style="background:#dc2626;color:white">Apagar</button>
+<button onclick="closeModal()">Fechar</button>
 
 </div>
 </div>
@@ -194,133 +207,209 @@ button{
 <script>
 
 /* =========================
-   DADOS (mais estável)
+   STORAGE
 ========================= */
-let data = JSON.parse(localStorage.getItem("agenda_filarmonica") || "{}");
+let data = JSON.parse(localStorage.getItem("agenda_pro") || "{}");
 let events = data.events || [];
+let editIndex = null;
 
 /* =========================
-   CALENDÁRIO
+   INIT
 ========================= */
-let today = new Date();
+let monthSel = document.getElementById("month");
+let yearSel = document.getElementById("year");
 
+const meses=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+
+meses.forEach((m,i)=>{
+let o=document.createElement("option");
+o.value=i;o.textContent=m;
+monthSel.appendChild(o);
+});
+
+for(let y=2024;y<=2035;y++){
+let o=document.createElement("option");
+o.value=y;o.textContent=y;
+yearSel.appendChild(o);
+});
+
+let now=new Date();
+monthSel.value=now.getMonth();
+yearSel.value=now.getFullYear();
+
+/* =========================
+   RENDER
+========================= */
 function render(){
-  const cal = document.getElementById("calendar");
-  cal.innerHTML = "";
 
-  let year = today.getFullYear();
-  let month = today.getMonth();
+let m=parseInt(monthSel.value);
+let y=parseInt(yearSel.value);
 
-  let first = new Date(year,month,1);
-  let last = new Date(year,month+1,0);
+let cal=document.getElementById("calendar");
+cal.innerHTML="";
 
-  for(let i=1;i<=last.getDate();i++){
-    let dateStr = `${year}-${String(month+1).padStart(2,"0")}-${String(i).padStart(2,"0")}`;
+let first=new Date(y,m,1);
+let start=first.getDay();
+let days=new Date(y,m+1,0).getDate();
 
-    let div = document.createElement("div");
-    div.className="day";
-    div.innerHTML="<b>"+i+"</b>";
+for(let i=0;i<start;i++){
+cal.innerHTML+="<div class='empty'></div>";
+}
 
-    events.filter(e=>e.date===dateStr).forEach(e=>{
-      let ev=document.createElement("div");
-      ev.className="event";
-      ev.innerText=e.band;
-      div.appendChild(ev);
-    });
+for(let d=1;d<=days;d++){
 
-    div.onclick=()=>openModal(dateStr);
-    cal.appendChild(div);
-  }
+let date=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
 
-  renderNext();
-  renderStats();
+let div=document.createElement("div");
+div.className="day";
+div.innerHTML="<b>"+d+"</b>";
+
+let filtered = events.filter(e=>e.date===date);
+
+filtered.forEach((e,i)=>{
+let c="blue";
+if(e.band.includes("Figueiredo")) c="green";
+if(e.band==="Outros") c="orange";
+
+let ev=document.createElement("div");
+ev.className="event "+c;
+ev.innerText=e.band;
+ev.onclick=(event)=>{
+event.stopPropagation();
+openModal(date,i);
+};
+div.appendChild(ev);
+});
+
+div.onclick=()=>openModal(date);
+
+cal.appendChild(div);
+}
+
+renderStats();
+renderNext();
 }
 
 /* =========================
    MODAL
 ========================= */
-function openModal(date){
-  document.getElementById("modal").style.display="flex";
-  document.getElementById("date").value=date;
+function openModal(date,index=null){
+document.getElementById("modal").style.display="flex";
+document.getElementById("date").value=date;
+
+editIndex=index;
+if(index!==null){
+let e=events[index];
+document.getElementById("band").value=e.band;
+document.getElementById("type").value=e.type;
+document.getElementById("location").value=e.location;
+document.getElementById("value").value=e.value;
+}
 }
 
 function closeModal(){
-  document.getElementById("modal").style.display="none";
+document.getElementById("modal").style.display="none";
+editIndex=null;
 }
 
 /* =========================
-   GUARDAR
+   SAVE
 ========================= */
 function save(){
 
-  let band = document.getElementById("band").value;
-  if(band==="Outros") band=document.getElementById("other").value;
+let band=document.getElementById("band").value;
+if(band==="Outros") band=document.getElementById("other").value;
 
-  let ev = {
-    band,
-    type:document.getElementById("type").value,
-    date:document.getElementById("date").value,
-    start:document.getElementById("start").value,
-    end:document.getElementById("end").value,
-    location:document.getElementById("location").value,
-    second:document.getElementById("second").value,
-    value:Number(document.getElementById("value").value),
-    notes:document.getElementById("notes").value
-  };
+let ev={
+band,
+type:document.getElementById("type").value,
+date:document.getElementById("date").value,
+start:document.getElementById("start").value,
+end:document.getElementById("end").value,
+location:document.getElementById("location").value,
+value:Number(document.getElementById("value").value)
+};
 
-  events.push(ev);
+if(editIndex!==null){
+events[editIndex]=ev;
+}else{
+events.push(ev);
+}
 
-  localStorage.setItem("agenda_filarmonica", JSON.stringify({
-    events: events,
-    savedAt: new Date().toISOString()
-  }));
+localStorage.setItem("agenda_pro",JSON.stringify({events}));
 
-  closeModal();
-  render();
+closeModal();
+render();
 }
 
 /* =========================
-   PRÓXIMOS EVENTOS
+   DELETE
+========================= */
+function removeEvent(){
+if(editIndex!==null){
+events.splice(editIndex,1);
+localStorage.setItem("agenda_pro",JSON.stringify({events}));
+}
+closeModal();
+render();
+}
+
+/* =========================
+   NEXT EVENTS
 ========================= */
 function renderNext(){
-  let div = document.getElementById("next");
-  div.innerHTML="";
+let div=document.getElementById("next");
+div.innerHTML="";
 
-  let sorted = [...events].sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
-
-  sorted.forEach(e=>{
-    let d=document.createElement("div");
-    d.className="card";
-    d.innerHTML=`${e.date} - ${e.band} (${e.type}) - €${e.value}`;
-    div.appendChild(d);
-  });
+events
+.sort((a,b)=>a.date.localeCompare(b.date))
+.slice(0,5)
+.forEach(e=>{
+div.innerHTML+=`<div class="card">${e.date} - ${e.band} - €${e.value}</div>`;
+});
 }
 
 /* =========================
-   ESTATÍSTICAS
+   STATS
 ========================= */
 function renderStats(){
-  let total = events.length;
-  let serv = events.filter(e=>e.type==="Serviço").length;
-  let ens = events.filter(e=>e.type==="Ensaio").length;
-  let money = events.reduce((a,b)=>a + (b.value||0),0);
+let total=events.length;
+let serv=events.filter(e=>e.type==="Serviço").length;
+let ens=events.filter(e=>e.type==="Ensaio").length;
+let money=events.reduce((a,b)=>a+(b.value||0),0);
 
-  document.getElementById("stats").innerHTML=`
-    Eventos: ${total}<br>
-    Serviços: ${serv}<br>
-    Ensaios: ${ens}<br>
-    Total: €${money}
-  `;
+document.getElementById("stats").innerHTML=`
+Total: ${total}<br>
+Serviços: ${serv}<br>
+Ensaios: ${ens}<br>
+Total ganho: €${money}
+`;
 }
 
 /* =========================
-   TEMA
+   NAV
+========================= */
+function prevMonth(){
+monthSel.value--;
+if(monthSel.value<0){monthSel.value=11;yearSel.value--;}
+render();
+}
+
+function nextMonth(){
+monthSel.value++;
+if(monthSel.value>11){monthSel.value=0;yearSel.value++;}
+render();
+}
+
+/* =========================
+   THEME
 ========================= */
 function toggleTheme(){
-  document.body.classList.toggle("dark");
+document.body.classList.toggle("dark");
 }
 
 render();
+
 </script>
 
 </body>
