@@ -28,7 +28,7 @@ header{
   padding:10px;
 }
 
-select,button{
+select,button,input{
   padding:6px;
   border-radius:6px;
 }
@@ -49,9 +49,7 @@ select,button{
   cursor:pointer;
 }
 
-.empty{
-  background:transparent;
-}
+.empty{background:transparent;}
 
 .event{
   font-size:10px;
@@ -62,6 +60,7 @@ select,button{
   border-radius:4px;
 }
 
+/* MODAL */
 #modal{
   display:none;
   position:fixed;
@@ -85,6 +84,15 @@ input,select{
   margin:5px 0;
   padding:6px;
 }
+
+/* SLIDER */
+.sliderBox{
+  margin:10px 0;
+}
+
+#valueLabel{
+  font-weight:bold;
+}
 </style>
 </head>
 
@@ -101,6 +109,11 @@ input,select{
 <select id="year"></select>
 
 <button onclick="nextMonth()">▶</button>
+</div>
+
+<!-- 💰 TOTAL MÊS -->
+<div style="padding:10px">
+<b>💰 Total deste mês:</b> <span id="monthTotal">0€</span>
 </div>
 
 <div id="calendar"></div>
@@ -122,8 +135,14 @@ input,select{
 <input type="date" id="date">
 <input type="time" id="start">
 <input type="time" id="end">
+<input id="location" placeholder="Localização">
 
-<input id="location" placeholder="Local">
+<!-- 💶 SLIDER -->
+<div class="sliderBox">
+<div id="valueLabel">Valor: 60€</div>
+<input type="range" id="value" min="20" max="150" step="5" value="60"
+oninput="updateSlider(this.value)">
+</div>
 
 <button onclick="save()">Guardar</button>
 <button onclick="closeModal()">Fechar</button>
@@ -133,23 +152,23 @@ input,select{
 
 <script>
 
-/* =========================
-   DADOS
-========================= */
+/* ======================
+   STORAGE
+====================== */
 let events = JSON.parse(localStorage.getItem("agenda") || "[]");
 
-/* =========================
-   DATA
-========================= */
+/* ======================
+   DATE
+====================== */
 let now = new Date();
 let m = now.getMonth();
 let y = now.getFullYear();
 
-/* =========================
+/* ======================
    SELECTS
-========================= */
-const monthSel = document.getElementById("month");
-const yearSel = document.getElementById("year");
+====================== */
+const monthSel=document.getElementById("month");
+const yearSel=document.getElementById("year");
 
 const meses=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
 
@@ -161,53 +180,76 @@ for(let i=2024;i<=2035;i++){
 yearSel.innerHTML += `<option value="${i}">${i}</option>`;
 }
 
-monthSel.value = m;
-yearSel.value = y;
+monthSel.value=m;
+yearSel.value=y;
 
-/* =========================
-   RENDER
-========================= */
-function render(){
-
-m = parseInt(monthSel.value);
-y = parseInt(yearSel.value);
-
-let cal = document.getElementById("calendar");
-cal.innerHTML = "";
-
-let first = new Date(y,m,1);
-let start = first.getDay();
-let days = new Date(y,m+1,0).getDate();
-
-for(let i=0;i<start;i++){
-cal.innerHTML += "<div class='empty'></div>";
+/* ======================
+   SLIDER
+====================== */
+function updateSlider(v){
+document.getElementById("valueLabel").innerText="Valor: "+v+"€";
 }
 
-for(let d=1; d<=days; d++){
+/* ======================
+   RENDER
+====================== */
+function render(){
 
-let date = `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+m=parseInt(monthSel.value);
+y=parseInt(yearSel.value);
 
-let div = document.createElement("div");
-div.className = "day";
-div.innerHTML = "<b>"+d+"</b>";
+let cal=document.getElementById("calendar");
+cal.innerHTML="";
+
+let first=new Date(y,m,1);
+let start=first.getDay();
+let days=new Date(y,m+1,0).getDate();
+
+for(let i=0;i<start;i++){
+cal.innerHTML+="<div class='empty'></div>";
+}
+
+for(let d=1;d<=days;d++){
+
+let date=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+
+let div=document.createElement("div");
+div.className="day";
+div.innerHTML="<b>"+d+"</b>";
 
 events.filter(e=>e.date===date).forEach(e=>{
-let ev = document.createElement("div");
-ev.className = "event";
-ev.innerText = e.band;
+let ev=document.createElement("div");
+ev.className="event";
+ev.innerText=e.band;
 div.appendChild(ev);
 });
 
-div.onclick = ()=>openModal(date);
+div.onclick=()=>openModal(date);
 
 cal.appendChild(div);
 }
 
+renderMonthTotal();
 }
 
-/* =========================
+/* ======================
+   TOTAL MÊS
+====================== */
+function renderMonthTotal(){
+
+let total = events
+.filter(e=>{
+let d=new Date(e.date);
+return d.getMonth()==m && d.getFullYear()==y;
+})
+.reduce((a,b)=>a+(b.value||0),0);
+
+document.getElementById("monthTotal").innerText = total + "€";
+}
+
+/* ======================
    MODAL
-========================= */
+====================== */
 function openModal(date){
 document.getElementById("modal").style.display="flex";
 document.getElementById("date").value=date;
@@ -217,9 +259,9 @@ function closeModal(){
 document.getElementById("modal").style.display="none";
 }
 
-/* =========================
+/* ======================
    SAVE
-========================= */
+====================== */
 function save(){
 
 let band=document.getElementById("band").value;
@@ -227,7 +269,8 @@ if(band==="Outros") band=document.getElementById("other").value;
 
 events.push({
 band,
-date:document.getElementById("date").value
+date:document.getElementById("date").value,
+value:Number(document.getElementById("value").value)
 });
 
 localStorage.setItem("agenda",JSON.stringify(events));
@@ -236,9 +279,9 @@ closeModal();
 render();
 }
 
-/* =========================
+/* ======================
    NAV
-========================= */
+====================== */
 function prevMonth(){
 m--;
 if(m<0){m=11;y--;}
@@ -255,9 +298,9 @@ yearSel.value=y;
 render();
 }
 
-/* =========================
-   INIT (IMPORTANTE)
-========================= */
+/* ======================
+   INIT
+====================== */
 render();
 
 </script>
