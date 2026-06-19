@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agenda Filarmónica PRO</title>
+<title>Agenda Filarmónica</title>
 
 <style>
 :root{
@@ -15,9 +15,9 @@
 }
 
 body.dark{
-  --bg:#121826;
-  --card:#1f2937;
-  --text:#f9fafb;
+  --bg:#1a202c;
+  --card:#2d3748;
+  --text:#f7fafc;
 }
 
 body{
@@ -37,11 +37,11 @@ header{
   box-shadow:var(--shadow);
 }
 
-/* CONTROLS */
+/* CONTROLOS */
 .controls{
   display:flex;
-  gap:5px;
   justify-content:center;
+  gap:5px;
   padding:10px;
 }
 
@@ -51,7 +51,7 @@ button,select,input{
   border:none;
 }
 
-/* CALENDAR */
+/* CALENDÁRIO */
 #calendar{
   display:grid;
   grid-template-columns:repeat(7,1fr);
@@ -61,7 +61,7 @@ button,select,input{
 
 .day{
   background:var(--card);
-  min-height:75px;
+  min-height:70px;
   padding:5px;
   border-radius:8px;
   box-shadow:var(--shadow);
@@ -102,7 +102,13 @@ button,select,input{
   border-radius:12px;
 }
 
-/* LIST */
+input,select,textarea{
+  width:100%;
+  margin:5px 0;
+  padding:7px;
+}
+
+/* LISTAS */
 .section{
   padding:10px;
 }
@@ -121,45 +127,42 @@ button,select,input{
 <body>
 
 <header>
-<h1>🎼 Agenda PRO</h1>
+<h1>🎼 Agenda Filarmónica</h1>
 <button onclick="toggleTheme()">🌓</button>
 </header>
 
 <!-- CONTROLOS -->
 <div class="controls">
+
 <button onclick="prevMonth()">◀</button>
 
-<select id="month" onchange="render()"></select>
-<select id="year" onchange="render()"></select>
+<select id="month"></select>
+<select id="year"></select>
 
 <button onclick="nextMonth()">▶</button>
+
 </div>
 
-<!-- SEARCH -->
-<div class="section">
-<input id="search" placeholder="Pesquisar..." oninput="render()">
-</div>
-
-<!-- CALENDAR -->
+<!-- CALENDÁRIO -->
 <div id="calendar"></div>
 
-<!-- STATS -->
-<div class="section">
-<h3>Estatísticas</h3>
-<div id="stats"></div>
-</div>
-
-<!-- NEXT EVENTS -->
+<!-- PRÓXIMOS -->
 <div class="section">
 <h3>Próximos eventos</h3>
 <div id="next"></div>
+</div>
+
+<!-- ESTATÍSTICAS -->
+<div class="section">
+<h3>Estatísticas</h3>
+<div id="stats"></div>
 </div>
 
 <!-- MODAL -->
 <div id="modal">
 <div class="box">
 
-<h3 id="modalTitle">Novo Evento</h3>
+<h3>Evento</h3>
 
 <select id="band">
 <option>Sociedade Artística Banda de Vale de Cambra</option>
@@ -179,7 +182,6 @@ button,select,input{
 <input type="time" id="end">
 
 <input id="location" placeholder="Localização">
-<input id="second" placeholder="Segunda banda">
 
 <select id="value">
 <option>0</option>
@@ -195,11 +197,8 @@ button,select,input{
 <option>200</option>
 </select>
 
-<textarea id="notes" placeholder="Notas"></textarea>
-
 <button onclick="save()">Guardar</button>
-<button onclick="removeEvent()" style="background:#dc2626;color:white">Apagar</button>
-<button onclick="closeModal()">Fechar</button>
+<button onclick="closeModal()" style="background:#555;color:white">Fechar</button>
 
 </div>
 </div>
@@ -209,75 +208,83 @@ button,select,input{
 /* =========================
    STORAGE
 ========================= */
-let data = JSON.parse(localStorage.getItem("agenda_pro") || "{}");
+let data = JSON.parse(localStorage.getItem("agenda_filarmonica") || "{}");
 let events = data.events || [];
-let editIndex = null;
 
 /* =========================
-   INIT
+   INIT DATE
 ========================= */
-let monthSel = document.getElementById("month");
-let yearSel = document.getElementById("year");
+let now = new Date();
+let currentMonth = now.getMonth();
+let currentYear = now.getFullYear();
 
-const meses=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+/* =========================
+   SELECTS
+========================= */
+const monthSel = document.getElementById("month");
+const yearSel = document.getElementById("year");
 
+const meses=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+
+/* meses */
 meses.forEach((m,i)=>{
 let o=document.createElement("option");
-o.value=i;o.textContent=m;
+o.value=i;
+o.textContent=m;
 monthSel.appendChild(o);
 });
 
+/* anos */
 for(let y=2024;y<=2035;y++){
 let o=document.createElement("option");
-o.value=y;o.textContent=y;
+o.value=y;
+o.textContent=y;
 yearSel.appendChild(o);
-});
+}
 
-let now=new Date();
-monthSel.value=now.getMonth();
-yearSel.value=now.getFullYear();
+/* set default */
+monthSel.value=currentMonth;
+yearSel.value=currentYear;
 
 /* =========================
    RENDER
 ========================= */
 function render(){
 
-let m=parseInt(monthSel.value);
-let y=parseInt(yearSel.value);
+currentMonth=parseInt(monthSel.value);
+currentYear=parseInt(yearSel.value);
 
 let cal=document.getElementById("calendar");
 cal.innerHTML="";
 
-let first=new Date(y,m,1);
+let first=new Date(currentYear,currentMonth,1);
 let start=first.getDay();
-let days=new Date(y,m+1,0).getDate();
+let days=new Date(currentYear,currentMonth+1,0).getDate();
 
+/* empty */
 for(let i=0;i<start;i++){
 cal.innerHTML+="<div class='empty'></div>";
 }
 
+/* days */
 for(let d=1;d<=days;d++){
 
-let date=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+let date=`${currentYear}-${String(currentMonth+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
 
 let div=document.createElement("div");
 div.className="day";
 div.innerHTML="<b>"+d+"</b>";
 
-let filtered = events.filter(e=>e.date===date);
-
-filtered.forEach((e,i)=>{
-let c="blue";
-if(e.band.includes("Figueiredo")) c="green";
-if(e.band==="Outros") c="orange";
-
+events.filter(e=>e.date===date).forEach(e=>{
 let ev=document.createElement("div");
-ev.className="event "+c;
+
+let color="blue";
+if(e.band.includes("Figueiredo")) color="green";
+if(e.band==="Outros") color="orange";
+
+ev.className="event "+color;
 ev.innerText=e.band;
-ev.onclick=(event)=>{
-event.stopPropagation();
-openModal(date,i);
-};
+
 div.appendChild(ev);
 });
 
@@ -286,30 +293,20 @@ div.onclick=()=>openModal(date);
 cal.appendChild(div);
 }
 
-renderStats();
 renderNext();
+renderStats();
 }
 
 /* =========================
    MODAL
 ========================= */
-function openModal(date,index=null){
+function openModal(date){
 document.getElementById("modal").style.display="flex";
 document.getElementById("date").value=date;
-
-editIndex=index;
-if(index!==null){
-let e=events[index];
-document.getElementById("band").value=e.band;
-document.getElementById("type").value=e.type;
-document.getElementById("location").value=e.location;
-document.getElementById("value").value=e.value;
-}
 }
 
 function closeModal(){
 document.getElementById("modal").style.display="none";
-editIndex=null;
 }
 
 /* =========================
@@ -320,7 +317,7 @@ function save(){
 let band=document.getElementById("band").value;
 if(band==="Outros") band=document.getElementById("other").value;
 
-let ev={
+events.push({
 band,
 type:document.getElementById("type").value,
 date:document.getElementById("date").value,
@@ -328,28 +325,10 @@ start:document.getElementById("start").value,
 end:document.getElementById("end").value,
 location:document.getElementById("location").value,
 value:Number(document.getElementById("value").value)
-};
+});
 
-if(editIndex!==null){
-events[editIndex]=ev;
-}else{
-events.push(ev);
-}
+localStorage.setItem("agenda_filarmonica",JSON.stringify({events}));
 
-localStorage.setItem("agenda_pro",JSON.stringify({events}));
-
-closeModal();
-render();
-}
-
-/* =========================
-   DELETE
-========================= */
-function removeEvent(){
-if(editIndex!==null){
-events.splice(editIndex,1);
-localStorage.setItem("agenda_pro",JSON.stringify({events}));
-}
 closeModal();
 render();
 }
@@ -358,6 +337,7 @@ render();
    NEXT EVENTS
 ========================= */
 function renderNext(){
+
 let div=document.getElementById("next");
 div.innerHTML="";
 
@@ -373,13 +353,14 @@ div.innerHTML+=`<div class="card">${e.date} - ${e.band} - €${e.value}</div>`;
    STATS
 ========================= */
 function renderStats(){
+
 let total=events.length;
 let serv=events.filter(e=>e.type==="Serviço").length;
 let ens=events.filter(e=>e.type==="Ensaio").length;
 let money=events.reduce((a,b)=>a+(b.value||0),0);
 
 document.getElementById("stats").innerHTML=`
-Total: ${total}<br>
+Total eventos: ${total}<br>
 Serviços: ${serv}<br>
 Ensaios: ${ens}<br>
 Total ganho: €${money}
@@ -391,13 +372,19 @@ Total ganho: €${money}
 ========================= */
 function prevMonth(){
 monthSel.value--;
-if(monthSel.value<0){monthSel.value=11;yearSel.value--;}
+if(monthSel.value<0){
+monthSel.value=11;
+yearSel.value--;
+}
 render();
 }
 
 function nextMonth(){
 monthSel.value++;
-if(monthSel.value>11){monthSel.value=0;yearSel.value++;}
+if(monthSel.value>11){
+monthSel.value=0;
+yearSel.value++;
+}
 render();
 }
 
@@ -408,6 +395,7 @@ function toggleTheme(){
 document.body.classList.toggle("dark");
 }
 
+/* START */
 render();
 
 </script>
