@@ -1,0 +1,104 @@
+.eventRow {
+  padding: 8px 0;
+  border-bottom: 0.5px solid var(--border);
+  cursor: pointer;
+}
+
+.eventRow:last-child {
+  border-bottom: none;
+}
+
+.eventRow:hover {
+  opacity: 0.8;
+}
+
+.eventRowTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.eventName {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.eventLine {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.eventSub {
+  font-size: 10px;
+  color: var(--text2);
+}
+
+.eventMoney {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--success);
+}
+
+.secondBand {
+  font-size: 10px;
+  color: #534ab7;
+  margin-top: 2px;
+  font-style: italic;
+}
+
+.futureRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 0.5px solid var(--border);
+  cursor: pointer;
+}
+
+.futureRow:last-child {
+  border-bottom: none;
+}
+
+.futureRow:hover {
+  opacity: 0.8;
+}
+
+.futureName {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.futureSub {
+  font-size: 10px;
+  color: var(--text2);
+}
+
+.futureRight {
+  text-align: right;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.futureMoney {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--success);
+}
+
+.bandBadge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-top: 2px;
+  display: inline-block;
+}
+
+.emptyText {
+  font-size: 12px;
+  color: var(--text2);
+}

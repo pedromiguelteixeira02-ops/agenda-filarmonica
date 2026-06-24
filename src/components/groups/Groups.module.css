@@ -1,0 +1,206 @@
+.intro {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+
+.setupBtns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.setupPanel {
+  margin-top: 12px;
+}
+
+.codeInput {
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-family: monospace;
+  font-weight: 700;
+}
+
+.codeDisplay {
+  font-family: monospace;
+  font-weight: 900;
+  font-size: 22px;
+  color: var(--primary);
+  letter-spacing: 4px;
+  text-align: center;
+  background: var(--pbg);
+  border-radius: var(--r);
+  padding: 10px;
+  margin: 8px 0;
+  border: 0.5px dashed rgba(24, 95, 165, 0.3);
+  cursor: pointer;
+  user-select: all;
+}
+
+.copyNotice {
+  text-align: center;
+  font-size: 10px;
+  color: var(--text3);
+  margin-top: 3px;
+}
+
+.groupTip {
+  background: var(--bg);
+  border-radius: var(--r);
+  padding: 8px 10px;
+  font-size: 11px;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
+.groupName {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.groupMeta {
+  font-size: 11px;
+  color: var(--text2);
+  margin-bottom: 2px;
+}
+
+.votingAs strong {
+  color: var(--text);
+}
+
+.leaveBtn {
+  border: 0.5px solid var(--border2);
+  border-radius: var(--r);
+  background: none;
+  padding: 7px 20px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text2);
+  font-family: inherit;
+  font-weight: 600;
+}
+
+.leaveBtn:hover {
+  background: var(--dbg);
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.leaveWrap {
+  text-align: center;
+  padding: 16px 0;
+}
+
+/* Poll card */
+.pollCard {
+  background: var(--card);
+  border-radius: var(--rl);
+  border: 0.5px solid var(--border);
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  box-shadow: var(--shadow);
+}
+
+.past {
+  opacity: 0.5;
+}
+
+.pollHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 3px;
+}
+
+.pollName {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.pollSub {
+  font-size: 10px;
+  color: var(--text2);
+  margin-bottom: 3px;
+}
+
+.tally {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  margin: 5px 0;
+}
+
+.tSim {
+  color: var(--success);
+}
+
+.tNao {
+  color: var(--danger);
+}
+
+.tTal {
+  color: var(--warn);
+}
+
+.pastNote {
+  font-size: 10px;
+  color: var(--text3);
+  font-style: italic;
+}
+
+.voteGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.voteBtn {
+  padding: 6px 2px;
+  border-radius: var(--r);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 0.5px solid var(--border);
+  background: var(--bg);
+  color: var(--text2);
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.sSim {
+  background: var(--sbg);
+  color: var(--success);
+  border-color: var(--success);
+}
+
+.sNao {
+  background: var(--dbg);
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.sTal {
+  background: var(--wbg);
+  color: var(--warn);
+  border-color: var(--warn);
+}
+
+.memberVotes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: 6px;
+}
+
+.memberTag {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+}

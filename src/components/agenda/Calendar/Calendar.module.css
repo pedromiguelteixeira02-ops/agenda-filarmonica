@@ -1,0 +1,81 @@
+.calWrap {
+  background: #f7f9fc;
+  padding: 4px 5px 6px;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.calDaysHeader {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 2px;
+}
+
+.calDayLabel {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text3);
+  padding: 3px 0;
+}
+
+.calGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.calCell {
+  background: var(--card);
+  border-radius: 6px;
+  padding: 3px;
+  min-height: 54px;
+  cursor: pointer;
+  border: 0.5px solid var(--border);
+  transition: border-color 0.15s;
+}
+
+.calCell:hover {
+  border-color: var(--border2);
+}
+
+.today {
+  border: 2px solid var(--primary);
+}
+
+.empty {
+  background: transparent;
+  border: none;
+  cursor: default;
+  min-height: 0;
+}
+
+.calNum {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text2);
+  display: block;
+  margin-bottom: 1px;
+}
+
+.today .calNum {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.calEvent {
+  font-size: 8px;
+  padding: 1px 3px;
+  border-radius: 3px;
+  margin-bottom: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: 700;
+  display: block;
+  cursor: pointer;
+}
+
+.calEvent:hover {
+  opacity: 0.8;
+}

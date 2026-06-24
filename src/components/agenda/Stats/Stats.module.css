@@ -1,0 +1,105 @@
+.statGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.statBox {
+  padding: 8px 10px;
+  border-radius: var(--r);
+}
+
+.blue {
+  background: var(--pbg);
+}
+
+.gray {
+  background: var(--bg);
+}
+
+.statLabel {
+  font-size: 10px;
+  color: var(--text2);
+  margin-bottom: 2px;
+  font-weight: 600;
+}
+
+.statNum {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.blue .statNum {
+  color: var(--primary);
+}
+
+.gray .statNum {
+  color: var(--text);
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 0.5px solid var(--border);
+  padding-top: 8px;
+}
+
+.monthTotalLabel {
+  font-size: 11px;
+  color: var(--text2);
+}
+
+.totalVal {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--success);
+}
+
+.grandTotal {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--success);
+}
+
+.accumRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accumTitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.accumSub {
+  font-size: 11px;
+  color: var(--text2);
+}
+
+.addBtn {
+  width: 100%;
+  padding: 9px;
+  border: 0.5px dashed var(--border2);
+  border-radius: var(--rl);
+  background: none;
+  color: var(--text2);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  transition: background 0.15s;
+}
+
+.addBtn:hover {
+  background: var(--card);
+}

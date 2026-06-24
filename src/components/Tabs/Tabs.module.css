@@ -1,0 +1,31 @@
+.tabs {
+  display: flex;
+  border-top: 0.5px solid var(--border);
+}
+
+.tabBtn {
+  flex: 1;
+  padding: 7px 4px 6px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--text3);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-family: inherit;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.icon {
+  font-size: 17px;
+}
+
+.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}

@@ -1,0 +1,172 @@
+:root {
+  --bg: #f0f4f8;
+  --card: #fff;
+  --text: #1a202c;
+  --text2: #718096;
+  --text3: #a0aec0;
+  --border: rgba(0, 0, 0, 0.09);
+  --border2: rgba(0, 0, 0, 0.18);
+  --primary: #185fa5;
+  --pbg: #e6f1fb;
+  --success: #0a6641;
+  --sbg: #dcf5eb;
+  --danger: #943515;
+  --dbg: #fae9e3;
+  --warn: #7a4600;
+  --wbg: #faeeda;
+  --r: 8px;
+  --rl: 12px;
+  --shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+#root {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* Estilos partilhados de formulário usados por vários módulos */
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 0.5px solid var(--border2);
+  border-radius: var(--r);
+  background: var(--bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(24, 95, 165, 0.12);
+}
+
+textarea {
+  resize: none;
+  line-height: 1.5;
+}
+
+/* Botões partilhados (modal + setup de grupo) */
+.btn-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.btn {
+  flex: 1;
+  padding: 9px 10px;
+  border: none;
+  border-radius: var(--r);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: filter 0.15s;
+}
+
+.btn:hover {
+  filter: brightness(0.95);
+}
+
+.btn-primary {
+  background: var(--pbg);
+  color: var(--primary);
+}
+
+.btn-danger {
+  background: var(--dbg);
+  color: var(--danger);
+}
+
+.btn-secondary {
+  background: var(--bg);
+  color: var(--text2);
+  border: 0.5px solid var(--border2);
+}
+
+/* Campos de formulário partilhados */
+.field {
+  margin-bottom: 8px;
+}
+
+.field label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text2);
+  display: block;
+  margin-bottom: 3px;
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* Cartão e estados partilhados */
+.card {
+  background: var(--card);
+  border-radius: var(--rl);
+  border: 0.5px solid var(--border);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--text2);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.empty-icon {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.content {
+  padding: 8px 8px 90px;
+}
+
+.date-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
