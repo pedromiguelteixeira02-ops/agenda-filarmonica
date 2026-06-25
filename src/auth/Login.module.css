@@ -31,3 +31,84 @@
   margin-bottom: 8px;
   text-align: left;
 }
+
+.info {
+  font-size: 12px;
+  color: var(--success);
+  margin-bottom: 8px;
+  text-align: left;
+  line-height: 1.5;
+}
+
+.linkBtn {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 10px;
+}
+
+.switch {
+  font-size: 13px;
+  color: var(--text2);
+  margin-top: 14px;
+}
+
+.linkInline {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 12px;
+  color: var(--text3);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.magicBtn {
+  width: 100%;
+}
+
+.pwWrap {
+  position: relative;
+}
+
+.pwInput {
+  padding-right: 44px;
+}
+
+.pwToggle {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 6px;
+}
