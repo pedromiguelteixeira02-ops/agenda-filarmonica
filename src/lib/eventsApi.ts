@@ -12,12 +12,11 @@ interface EventRow {
   end_time: string;
   location: string;
   second_band: string;
-  value: number;
   notes: string;
 }
 
 const COLS =
-  'id, band, type, name, date, start_time, end_time, location, second_band, value, notes';
+  'id, band, type, name, date, start_time, end_time, location, second_band, notes';
 
 function rowToEvent(r: EventRow): AgendaEvent {
   return {
@@ -30,7 +29,6 @@ function rowToEvent(r: EventRow): AgendaEvent {
     end: r.end_time,
     location: r.location,
     secondBand: r.second_band,
-    value: Number(r.value),
     notes: r.notes,
   };
 }
@@ -46,7 +44,6 @@ function eventToRow(e: Omit<AgendaEvent, 'id'>) {
     end_time: e.end,
     location: e.location,
     second_band: e.secondBand,
-    value: e.value,
     notes: e.notes,
   };
 }

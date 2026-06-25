@@ -14,7 +14,6 @@ function summarize(events: AgendaEvent[]) {
   return {
     services: events.filter((e) => e.type === 'Serviço').length,
     rehearsals: events.filter((e) => e.type === 'Ensaio').length,
-    value: events.reduce((a, e) => a + Number(e.value || 0), 0),
   };
 }
 
@@ -42,10 +41,6 @@ export function Stats({ events, year, month, onAdd }: StatsProps) {
             <div className={styles.statNum}>{monthSummary.rehearsals}</div>
           </div>
         </div>
-        <div className={styles.statRow}>
-          <span className={styles.monthTotalLabel}>Total do mês</span>
-          <span className={styles.totalVal}>€{monthSummary.value.toFixed(2)}</span>
-        </div>
       </div>
 
       <div className="card">
@@ -56,7 +51,6 @@ export function Stats({ events, year, month, onAdd }: StatsProps) {
               {allSummary.services} serviços · {allSummary.rehearsals} ensaios
             </div>
           </div>
-          <div className={styles.grandTotal}>€{allSummary.value.toFixed(2)}</div>
         </div>
       </div>
 

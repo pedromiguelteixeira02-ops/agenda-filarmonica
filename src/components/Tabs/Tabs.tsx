@@ -4,7 +4,8 @@ import styles from './Tabs.module.css';
 const TABS: { id: TabId; icon: string; label: string }[] = [
   { id: 'agenda', icon: '📅', label: 'Agenda' },
   { id: 'next', icon: '🕐', label: 'Próximos' },
-  { id: 'groups', icon: '🎺', label: 'Naipes' },
+  { id: 'groups', icon: '✅', label: 'Assiduidade' },
+  { id: 'members', icon: '👥', label: 'Membros' },
 ];
 
 interface TabsProps {

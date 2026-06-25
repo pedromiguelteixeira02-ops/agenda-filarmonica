@@ -8,14 +8,11 @@ export interface Naipe {
 export interface BandMemberRow {
   userId: string;
   role: 'direcao' | 'membro';
+  naipeId: string | null;
 }
 export interface ProfileRow {
   id: string;
   name: string;
-}
-export interface NaipeMemberRow {
-  naipeId: string;
-  userId: string;
 }
 export interface AttendanceRow {
   eventId: string;
@@ -39,43 +36,16 @@ export async function createNaipe(bandId: string, name: string): Promise<void> {
   if (error) throw error;
 }
 
-export async function fetchNaipeMembers(bandId: string): Promise<NaipeMemberRow[]> {
-  const { data, error } = await supabase
-    .from('naipe_members')
-    .select('naipe_id, user_id, naipes!inner(band_id)')
-    .eq('naipes.band_id', bandId);
-  if (error) throw error;
-  return (data as { naipe_id: string; user_id: string }[]).map((r) => ({
-    naipeId: r.naipe_id,
-    userId: r.user_id,
-  }));
-}
-
-export async function toggleNaipe(naipeId: string, userId: string, join: boolean): Promise<void> {
-  if (join) {
-    const { error } = await supabase.from('naipe_members').insert({ naipe_id: naipeId, user_id: userId });
-    if (error) throw error;
-  } else {
-    const { error } = await supabase
-      .from('naipe_members')
-      .delete()
-      .eq('naipe_id', naipeId)
-      .eq('user_id', userId);
-    if (error) throw error;
-  }
-}
-
 // ---- Membros & perfis ----
 export async function fetchBandMembers(bandId: string): Promise<BandMemberRow[]> {
   const { data, error } = await supabase
     .from('band_members')
-    .select('user_id, role')
+    .select('user_id, role, naipe_id')
     .eq('band_id', bandId);
   if (error) throw error;
-  return (data as { user_id: string; role: 'direcao' | 'membro' }[]).map((r) => ({
-    userId: r.user_id,
-    role: r.role,
-  }));
+  return (data as { user_id: string; role: 'direcao' | 'membro'; naipe_id: string | null }[]).map(
+    (r) => ({ userId: r.user_id, role: r.role, naipeId: r.naipe_id }),
+  );
 }
 
 export async function fetchProfiles(userIds: string[]): Promise<ProfileRow[]> {
@@ -93,6 +63,48 @@ export async function fetchProfiles(userIds: string[]): Promise<ProfileRow[]> {
 
 export async function updateDisplayName(userId: string, name: string): Promise<void> {
   const { error } = await supabase.from('profiles').update({ display_name: name }).eq('id', userId);
+  if (error) throw error;
+}
+
+// ---- Naipe do próprio (self-service, via RPC segura) ----
+export async function setMyNaipe(bandId: string, naipeId: string | null): Promise<void> {
+  const { error } = await supabase.rpc('set_my_naipe', { band: bandId, naipe: naipeId });
+  if (error) throw error;
+}
+
+// ---- Gestão de membros (só direção, reforçado por RLS) ----
+export async function assignNaipe(
+  bandId: string,
+  userId: string,
+  naipeId: string | null,
+): Promise<void> {
+  const { error } = await supabase
+    .from('band_members')
+    .update({ naipe_id: naipeId })
+    .eq('band_id', bandId)
+    .eq('user_id', userId);
+  if (error) throw error;
+}
+
+export async function setRole(
+  bandId: string,
+  userId: string,
+  role: 'direcao' | 'membro',
+): Promise<void> {
+  const { error } = await supabase
+    .from('band_members')
+    .update({ role })
+    .eq('band_id', bandId)
+    .eq('user_id', userId);
+  if (error) throw error;
+}
+
+export async function removeMember(bandId: string, userId: string): Promise<void> {
+  const { error } = await supabase
+    .from('band_members')
+    .delete()
+    .eq('band_id', bandId)
+    .eq('user_id', userId);
   if (error) throw error;
 }
 

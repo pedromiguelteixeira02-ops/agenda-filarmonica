@@ -1,0 +1,269 @@
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.panelTitle {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.addBtn {
+  flex-shrink: 0;
+  border: 0.5px solid var(--border2);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.privateNote {
+  font-size: 11px;
+  color: var(--text3);
+  margin: 2px 0 6px;
+}
+
+.totalRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 8px 0;
+  margin-bottom: 4px;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.totalLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text2);
+}
+
+.totalVal {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--success);
+}
+
+.eyeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+}
+
+.eye {
+  font-size: 15px;
+}
+
+.unpaidRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 0 6px;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text2);
+}
+
+.unpaidVal {
+  color: var(--danger);
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 2px 0 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.checkRow input {
+  width: 18px;
+  height: 18px;
+}
+
+/* Linhas */
+.item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 0.5px solid var(--border);
+}
+
+.item:first-of-type {
+  border-top: none;
+}
+
+.past {
+  opacity: 0.55;
+}
+
+.itemMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.itemTop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.itemName {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemSub {
+  font-size: 11px;
+  color: var(--text2);
+  margin-top: 2px;
+}
+
+.vou,
+.talvez,
+.personalTag {
+  font-weight: 700;
+}
+
+.vou {
+  color: var(--success);
+}
+
+.talvez {
+  color: var(--warn);
+}
+
+.personalTag {
+  color: var(--primary);
+}
+
+.itemRight {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text2);
+}
+
+.valueInput {
+  width: 70px;
+  text-align: right;
+  padding: 7px 8px;
+  font-size: 15px;
+}
+
+.empty {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.6;
+  padding: 14px 2px;
+}
+
+/* Modal de evento pessoal */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 33, 54, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 200;
+}
+
+@media (min-width: 600px) {
+  .overlay {
+    align-items: center;
+    padding: 16px;
+  }
+}
+
+.box {
+  background: var(--card);
+  width: 100%;
+  max-width: 440px;
+  max-height: 92dvh;
+  overflow-y: auto;
+  border-radius: var(--rxl) var(--rxl) 0 0;
+  padding: 20px 16px calc(20px + var(--safe-b));
+}
+
+@media (min-width: 600px) {
+  .box {
+    border-radius: var(--rxl);
+  }
+}
+
+.boxHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.boxTitle {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--text2);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.detailLine {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+.detailLabel {
+  color: var(--text2);
+  font-weight: 700;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text2);
+  padding: 8px 2px 2px;
+}
+
+.dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  margin-right: 4px;
+  vertical-align: middle;
+}

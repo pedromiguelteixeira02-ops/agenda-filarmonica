@@ -3,41 +3,41 @@ import type { VoteValue } from '@/types';
 import { supabase } from '@/lib/supabase';
 import {
   fetchNaipes,
-  fetchNaipeMembers,
   fetchBandMembers,
   fetchProfiles,
   fetchAttendance,
   createNaipe as apiCreateNaipe,
-  toggleNaipe as apiToggleNaipe,
   setVote as apiSetVote,
   updateDisplayName as apiUpdateName,
+  setMyNaipe as apiSetMyNaipe,
+  assignNaipe as apiAssignNaipe,
+  setRole as apiSetRole,
+  removeMember as apiRemoveMember,
   type Naipe,
 } from '@/lib/rosterApi';
 
 export interface RosterMember {
   userId: string;
   role: 'direcao' | 'membro';
+  naipeId: string | null;
   name: string;
 }
 
 /**
- * Carrega o "roster" da banda: naipes, membros (com nomes), associações a naipes
- * e votos de assiduidade — tudo com sincronização em tempo real.
+ * Carrega o "roster" da banda: naipes, membros (com nome, papel e naipe) e votos
+ * de assiduidade — tudo com sincronização em tempo real.
  */
 export function useBandRoster(bandId: string, userId: string) {
   const [naipes, setNaipes] = useState<Naipe[]>([]);
   const [members, setMembers] = useState<RosterMember[]>([]);
-  /** naipeId -> Set<userId> */
-  const [naipeMembers, setNaipeMembers] = useState<Record<string, Set<string>>>({});
   /** eventId -> (userId -> status) */
   const [attendance, setAttendance] = useState<Record<string, Record<string, VoteValue>>>({});
   const [loading, setLoading] = useState(true);
 
   const reload = useCallback(async () => {
-    const [ns, bms, nms, att] = await Promise.all([
+    const [ns, bms, att] = await Promise.all([
       fetchNaipes(bandId),
       fetchBandMembers(bandId),
-      fetchNaipeMembers(bandId),
       fetchAttendance(bandId),
     ]);
     const profiles = await fetchProfiles(bms.map((m) => m.userId));
@@ -45,10 +45,6 @@ export function useBandRoster(bandId: string, userId: string) {
 
     setNaipes(ns);
     setMembers(bms.map((m) => ({ ...m, name: nameById.get(m.userId) ?? '' })));
-
-    const nmMap: Record<string, Set<string>> = {};
-    for (const r of nms) (nmMap[r.naipeId] ??= new Set()).add(r.userId);
-    setNaipeMembers(nmMap);
 
     const attMap: Record<string, Record<string, VoteValue>> = {};
     for (const r of att) (attMap[r.eventId] ??= {})[r.userId] = r.status;
@@ -63,7 +59,6 @@ export function useBandRoster(bandId: string, userId: string) {
     const channel = supabase
       .channel(`roster:${bandId}`)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'attendance' }, () => reload())
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'naipe_members' }, () => reload())
       .on('postgres_changes', { event: '*', schema: 'public', table: 'naipes' }, () => reload())
       .on('postgres_changes', { event: '*', schema: 'public', table: 'band_members' }, () => reload())
       .subscribe();
@@ -71,6 +66,12 @@ export function useBandRoster(bandId: string, userId: string) {
       supabase.removeChannel(channel);
     };
   }, [bandId, reload]);
+
+  /** naipeId -> Set<userId>, derivado dos membros. */
+  const naipeMembers: Record<string, Set<string>> = {};
+  for (const m of members) {
+    if (m.naipeId) (naipeMembers[m.naipeId] ??= new Set()).add(m.userId);
+  }
 
   const createNaipe = useCallback(
     async (name: string) => {
@@ -80,12 +81,36 @@ export function useBandRoster(bandId: string, userId: string) {
     [bandId, reload],
   );
 
-  const toggleMyNaipe = useCallback(
-    async (naipeId: string, join: boolean) => {
-      await apiToggleNaipe(naipeId, userId, join);
+  const setMyNaipe = useCallback(
+    async (naipeId: string | null) => {
+      await apiSetMyNaipe(bandId, naipeId);
       await reload();
     },
-    [userId, reload],
+    [bandId, reload],
+  );
+
+  const assignNaipe = useCallback(
+    async (targetUserId: string, naipeId: string | null) => {
+      await apiAssignNaipe(bandId, targetUserId, naipeId);
+      await reload();
+    },
+    [bandId, reload],
+  );
+
+  const setRole = useCallback(
+    async (targetUserId: string, role: 'direcao' | 'membro') => {
+      await apiSetRole(bandId, targetUserId, role);
+      await reload();
+    },
+    [bandId, reload],
+  );
+
+  const removeMember = useCallback(
+    async (targetUserId: string) => {
+      await apiRemoveMember(bandId, targetUserId);
+      await reload();
+    },
+    [bandId, reload],
   );
 
   const vote = useCallback(
@@ -104,17 +129,21 @@ export function useBandRoster(bandId: string, userId: string) {
     [userId, reload],
   );
 
-  const myName = members.find((m) => m.userId === userId)?.name ?? '';
+  const me = members.find((m) => m.userId === userId);
 
   return {
     naipes,
     members,
     naipeMembers,
     attendance,
-    myName,
+    myName: me?.name ?? '',
+    myNaipeId: me?.naipeId ?? null,
     loading,
     createNaipe,
-    toggleMyNaipe,
+    setMyNaipe,
+    assignNaipe,
+    setRole,
+    removeMember,
     vote,
     setMyName,
   };

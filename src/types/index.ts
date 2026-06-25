@@ -10,7 +10,6 @@ export interface AgendaEvent {
   end: string; // hh:mm
   location: string;
   secondBand: string;
-  value: number;
   notes: string;
 }
 
@@ -23,4 +22,4 @@ export interface Band {
 
 export type VoteValue = 'sim' | 'nao' | 'talvez';
 
-export type TabId = 'agenda' | 'next' | 'groups';
+export type TabId = 'agenda' | 'next' | 'groups' | 'members';

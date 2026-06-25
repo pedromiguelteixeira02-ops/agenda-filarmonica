@@ -52,7 +52,6 @@ export function NextTab({ events, onEditEvent }: NextTabProps) {
                   {ev.location} · {ev.start || '—'}
                   {ev.end ? ' – ' + ev.end : ''}
                 </span>
-                <span className={styles.eventMoney}>€{Number(ev.value || 0).toFixed(0)}</span>
               </div>
               {ev.secondBand && <div className={styles.secondBand}>+ {ev.secondBand}</div>}
             </div>
@@ -74,7 +73,6 @@ export function NextTab({ events, onEditEvent }: NextTabProps) {
                 </div>
               </div>
               <div className={styles.futureRight}>
-                <div className={styles.futureMoney}>€{Number(ev.value || 0).toFixed(0)}</div>
                 <span className={styles.bandBadge} style={{ background: bi.bg, color: bi.fg }}>
                   {bi.short}
                 </span>

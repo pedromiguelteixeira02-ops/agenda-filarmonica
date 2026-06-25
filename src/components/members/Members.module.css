@@ -1,0 +1,144 @@
+.hint {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.naipeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-top: 0.5px solid var(--border);
+}
+
+.naipeRow:first-of-type {
+  border-top: none;
+}
+
+.naipeName {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.count {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+}
+
+.addNaipe {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 0.5px solid var(--border);
+}
+
+.addNaipe input {
+  flex: 1;
+}
+
+.addNaipe button {
+  flex-shrink: 0;
+  width: auto;
+  padding: 9px 14px;
+}
+
+/* Lista de membros */
+.memberRow {
+  padding: 12px 0;
+  border-top: 0.5px solid var(--border);
+}
+
+.memberRow:first-of-type {
+  border-top: none;
+}
+
+.memberHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.memberName {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.you {
+  font-weight: 600;
+  color: var(--text3);
+}
+
+.roleDir,
+.roleMem {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.roleDir {
+  background: var(--pbg);
+  color: var(--primary);
+}
+
+.roleMem {
+  background: var(--surface);
+  color: var(--text2);
+}
+
+.memberControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.naipeSelect {
+  width: auto;
+  flex: 1;
+  min-width: 150px;
+  font-size: 14px;
+  padding: 8px 10px;
+}
+
+.naipeTag {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text2);
+}
+
+.adminBtns {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.smallBtn {
+  border: 0.5px solid var(--border2);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--text2);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 7px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.smallBtn:hover {
+  filter: brightness(0.97);
+}
+
+.danger {
+  color: var(--danger);
+}

@@ -16,7 +16,6 @@ function esc(s: string): string {
  */
 export function exportPDF(events: AgendaEvent[]): void {
   const sorted = [...events].sort((a, b) => a.date.localeCompare(b.date));
-  const totalV = events.reduce((a, e) => a + Number(e.value || 0), 0);
   const totalS = events.filter((e) => e.type === 'Serviço').length;
   const totalR = events.filter((e) => e.type === 'Ensaio').length;
 
@@ -31,7 +30,6 @@ export function exportPDF(events: AgendaEvent[]): void {
       <td>${esc(ev.location || '—')}</td>
       <td>${ev.start || '—'}${ev.end ? ' – ' + ev.end : ''}</td>
       <td style="color:#534AB7;font-style:italic">${esc(ev.secondBand || '—')}</td>
-      <td style="text-align:right;font-weight:700;color:#0a6641">€${Number(ev.value || 0).toFixed(0)}</td>
     </tr>`,
     )
     .join('');
@@ -57,15 +55,10 @@ tr:nth-child(even) td{background:#f7fafc}
 <div class="summary">
   <div><div class="s-val b">${totalS}</div><div class="s-label">Serviços</div></div>
   <div><div class="s-val">${totalR}</div><div class="s-label">Ensaios</div></div>
-  <div><div class="s-val g">€${totalV.toFixed(2)}</div><div class="s-label">Total recebido</div></div>
 </div>
 <table><thead>
-  <tr><th>Data</th><th>Evento</th><th>Tipo</th><th>Banda</th><th>Local</th><th>Horário</th><th>Banda convidada</th><th>Valor</th></tr>
+  <tr><th>Data</th><th>Evento</th><th>Tipo</th><th>Banda</th><th>Local</th><th>Horário</th><th>Banda convidada</th></tr>
 </thead><tbody>${rows}</tbody></table>
-<div class="footer">
-  <span style="font-size:13px;color:#718096">Total acumulado</span>
-  <span style="font-size:20px;font-weight:700;color:#0a6641">€${totalV.toFixed(2)}</span>
-</div>
 <script>window.addEventListener('load',()=>setTimeout(()=>window.print(),400));<\/script>
 </body></html>`;
 

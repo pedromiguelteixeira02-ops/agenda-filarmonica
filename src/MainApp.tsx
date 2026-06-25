@@ -9,6 +9,7 @@ import { Header } from '@/components/Header/Header';
 import { AgendaTab } from '@/components/agenda/AgendaTab';
 import { NextTab } from '@/components/next/NextTab';
 import { AttendanceTab } from '@/components/attendance/AttendanceTab';
+import { MembersTab } from '@/components/members/MembersTab';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { EventModal } from '@/components/EventModal/EventModal';
 import styles from './MainApp.module.css';
@@ -120,7 +121,11 @@ export function MainApp({ band, userId, onSwitchBand }: Props) {
           {tab === 'next' && <NextTab events={events} onEditEvent={openEdit} />}
 
           {tab === 'groups' && (
-            <AttendanceTab events={events} bandId={band.id} userId={userId} canManage={canManage} />
+            <AttendanceTab events={events} bandId={band.id} userId={userId} />
+          )}
+
+          {tab === 'members' && (
+            <MembersTab bandId={band.id} userId={userId} canManage={canManage} />
           )}
         </main>
       </div>

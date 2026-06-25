@@ -1,0 +1,219 @@
+.main {
+  min-width: 0;
+}
+
+.section {
+  padding: 12px 12px calc(36px + var(--safe-b));
+}
+
+/* Desktop: sidebar + conteúdo. */
+@media (min-width: 880px) {
+  .layout {
+    display: grid;
+    grid-template-columns: 248px minmax(0, 1fr);
+    align-items: start;
+  }
+  .mobileTop {
+    display: none;
+  }
+  .main {
+    padding: 8px 12px;
+  }
+  .section {
+    max-width: 820px;
+    margin: 0 auto;
+  }
+}
+
+.sidebar {
+  display: none;
+}
+
+@media (min-width: 880px) {
+  .sidebar {
+    display: flex;
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100dvh;
+    flex-direction: column;
+    gap: 14px;
+    padding: 22px 16px;
+    background: var(--surface);
+    border-right: 0.5px solid var(--border);
+  }
+}
+
+.brand {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  padding: 0 4px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 11px 12px;
+  border: none;
+  border-radius: var(--r);
+  background: none;
+  color: var(--text2);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+}
+
+.navItem:hover {
+  background: var(--card);
+  color: var(--text);
+}
+
+.navIcon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.active,
+.active:hover {
+  background: var(--pbg);
+  color: var(--primary);
+}
+
+.footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 9px 12px;
+  border: none;
+  border-radius: var(--r);
+  background: none;
+  color: var(--text2);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.action:hover {
+  background: var(--card);
+}
+
+.email {
+  font-size: 11px;
+  color: var(--text3);
+  padding: 0 12px;
+  word-break: break-all;
+}
+
+/* Mobile: cabeçalho + abas no topo. */
+.mHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: max(12px, var(--safe-t)) 16px 8px;
+}
+
+.mTitle {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.signout {
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 10px 8px;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.tabBtn {
+  flex: 1;
+  border: none;
+  background: none;
+  border-radius: var(--r);
+  padding: 8px 4px;
+  min-height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--text3);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.tabIcon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.tabActive,
+.tabActive:hover {
+  color: var(--primary);
+  background: var(--pbg);
+}
+
+/* Lista de bandas + forms */
+.bandRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  border-top: 0.5px solid var(--border);
+  padding: 13px 2px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.bandRow:first-of-type {
+  border-top: none;
+}
+
+.bandName {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.error {
+  font-size: 12px;
+  color: var(--danger);
+  padding: 0 6px 8px;
+}

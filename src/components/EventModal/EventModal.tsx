@@ -27,7 +27,6 @@ interface FormState {
   end: string;
   location: string;
   secondBand: string;
-  value: string;
   notes: string;
 }
 
@@ -43,7 +42,6 @@ function initForm(event: AgendaEvent | null, defaultDate: string): FormState {
       end: '',
       location: '',
       secondBand: '',
-      value: '0',
       notes: '',
     };
   }
@@ -58,7 +56,6 @@ function initForm(event: AgendaEvent | null, defaultDate: string): FormState {
     end: event.end ?? '',
     location: event.location ?? '',
     secondBand: event.secondBand ?? '',
-    value: String(event.value ?? 0),
     notes: event.notes ?? '',
   };
 }
@@ -95,7 +92,6 @@ export function EventModal({
       end: form.end,
       location: form.location.trim(),
       secondBand: form.secondBand.trim(),
-      value: Number(form.value || 0),
       notes: form.notes.trim(),
     });
   }
@@ -180,17 +176,6 @@ export function EventModal({
           placeholder="Segunda banda"
           value={form.secondBand}
           onChange={(e) => set('secondBand', e.target.value)}
-        />
-      </div>
-
-      <div className="field">
-        <label>Valor recebido (€)</label>
-        <input
-          type="number"
-          min="0"
-          step="5"
-          value={form.value}
-          onChange={(e) => set('value', e.target.value)}
         />
       </div>
 

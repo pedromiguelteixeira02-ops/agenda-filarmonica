@@ -1,6 +1,6 @@
 import type { Session } from '@supabase/supabase-js';
 import { useBands } from './useBands';
-import { BandPicker } from './BandPicker';
+import { HomeShell } from './HomeShell';
 import { MainApp } from '@/MainApp';
 
 /** Depois do login: escolher banda (ou criar/entrar) e só então abrir a app. */
@@ -11,8 +11,9 @@ export function BandGate({ session }: { session: Session }) {
 
   if (!active) {
     return (
-      <BandPicker
+      <HomeShell
         email={session.user.email ?? ''}
+        userId={session.user.id}
         bands={bands}
         onSelect={selectBand}
         onCreate={createBand}
