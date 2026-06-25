@@ -16,7 +16,6 @@ export function MembersTab({ bandId, userId, canManage }: Props) {
   const {
     naipes,
     members,
-    naipeMembers,
     myName,
     loading,
     createNaipe,
@@ -24,6 +23,7 @@ export function MembersTab({ bandId, userId, canManage }: Props) {
     assignNaipe,
     setRole,
     removeMember,
+    setNaipeResponsavel,
     setMyName,
   } = useBandRoster(bandId, userId);
 
@@ -43,6 +43,11 @@ export function MembersTab({ bandId, userId, canManage }: Props) {
     if (none.length) result.push({ key: NONE, label: 'Sem naipe', members: none });
     return result;
   }, [naipes, members]);
+
+  const responsavelIds = useMemo(
+    () => new Set(naipes.map((n) => n.responsavelId).filter(Boolean) as string[]),
+    [naipes],
+  );
 
   const filtered = useMemo(() => {
     const ms = filter === NONE ? members.filter((m) => !m.naipeId) : members.filter((m) => m.naipeId === filter);
@@ -84,8 +89,11 @@ export function MembersTab({ bandId, userId, canManage }: Props) {
             {m.name || 'Sem nome'}
             {isSelf && <span className={styles.you}> (tu)</span>}
           </span>
-          <span className={m.role === 'direcao' ? styles.roleDir : styles.roleMem}>
-            {m.role === 'direcao' ? 'Direção' : 'Membro'}
+          <span className={styles.badges}>
+            {responsavelIds.has(m.userId) && <span className={styles.respBadge}>Responsável</span>}
+            <span className={m.role === 'direcao' ? styles.roleDir : styles.roleMem}>
+              {m.role === 'direcao' ? 'Direção' : 'Membro'}
+            </span>
           </span>
         </div>
 
@@ -173,12 +181,34 @@ export function MembersTab({ bandId, userId, canManage }: Props) {
         <div className="card">
           <div className="card-title">Naipes da banda</div>
           {naipes.length === 0 && <p className={styles.hint}>Ainda não há naipes. Cria o primeiro.</p>}
-          {naipes.map((n) => (
-            <div key={n.id} className={styles.naipeRow}>
-              <span className={styles.naipeName}>{n.name}</span>
-              <span className={styles.count}>{(naipeMembers[n.id] ?? new Set()).size} membros</span>
-            </div>
-          ))}
+          {naipes.map((n) => {
+            const naipeMems = members.filter((m) => m.naipeId === n.id).sort(byName);
+            return (
+              <div key={n.id} className={styles.naipeBlock}>
+                <div className={styles.naipeRow}>
+                  <span className={styles.naipeName}>{n.name}</span>
+                  <span className={styles.count}>{naipeMems.length} membros</span>
+                </div>
+                <div className={styles.respRow}>
+                  <label>Responsável:</label>
+                  <select
+                    value={n.responsavelId ?? ''}
+                    disabled={naipeMems.length === 0}
+                    onChange={(e) =>
+                      guard(() => setNaipeResponsavel(n.id, e.target.value || null))
+                    }
+                  >
+                    <option value="">— nenhum —</option>
+                    {naipeMems.map((m) => (
+                      <option key={m.userId} value={m.userId}>
+                        {m.name || 'Sem nome'}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            );
+          })}
           <form className={styles.addNaipe} onSubmit={addNaipe}>
             <input
               value={newNaipe}

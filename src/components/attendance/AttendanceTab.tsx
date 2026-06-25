@@ -15,10 +15,29 @@ interface Props {
 const ALL = '__all__';
 
 export function AttendanceTab({ events, bandId, userId }: Props) {
-  const { naipes, members, naipeMembers, attendance, loading, vote } = useBandRoster(bandId, userId);
+  const { naipes, members, naipeMembers, attendance, loading, vote, setMemberVote } = useBandRoster(
+    bandId,
+    userId,
+  );
   const [filter, setFilter] = useState<string>(ALL);
 
   const nameById = useMemo(() => new Map(members.map((m) => [m.userId, m.name])), [members]);
+
+  /** Membros cuja presença o utilizador pode marcar (direção, ou responsável do naipe deles). */
+  const manageableIds = useMemo(() => {
+    const me = members.find((m) => m.userId === userId);
+    const isDirecao = me?.role === 'direcao';
+    const respById = new Map(naipes.map((n) => [n.id, n.responsavelId]));
+    return new Set(
+      members
+        .filter(
+          (m) =>
+            m.userId !== userId &&
+            (isDirecao || (m.naipeId != null && respById.get(m.naipeId) === userId)),
+        )
+        .map((m) => m.userId),
+    );
+  }, [members, naipes, userId]);
   const upcoming = useMemo(
     () => events.filter((e) => e.date >= todayStr).sort((a, b) => a.date.localeCompare(b.date)),
     [events],
@@ -30,6 +49,14 @@ export function AttendanceTab({ events, bandId, userId }: Props) {
       await vote(eventId, status);
     } catch (e) {
       alert(e instanceof Error ? e.message : 'Não foi possível registar o voto.');
+    }
+  }
+
+  async function setEntry(eventId: string, targetId: string, status: 'sim' | 'nao' | 'talvez') {
+    try {
+      await setMemberVote(eventId, targetId, status);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : 'Não foi possível marcar a presença.');
     }
   }
 
@@ -101,6 +128,8 @@ export function AttendanceTab({ events, bandId, userId }: Props) {
             entries={entries}
             myStatus={attendance[ev.id]?.[userId]}
             onVote={castVote}
+            manageableIds={manageableIds}
+            onSetEntry={setEntry}
           />
         );
       })}

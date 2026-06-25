@@ -13,6 +13,8 @@ import {
   assignNaipe as apiAssignNaipe,
   setRole as apiSetRole,
   removeMember as apiRemoveMember,
+  setNaipeResponsavel as apiSetNaipeResponsavel,
+  setMemberVote as apiSetMemberVote,
   type Naipe,
 } from '@/lib/rosterApi';
 
@@ -113,12 +115,28 @@ export function useBandRoster(bandId: string, userId: string) {
     [bandId, reload],
   );
 
+  const setNaipeResponsavel = useCallback(
+    async (naipeId: string, targetUserId: string | null) => {
+      await apiSetNaipeResponsavel(naipeId, targetUserId);
+      await reload();
+    },
+    [reload],
+  );
+
   const vote = useCallback(
     async (eventId: string, status: VoteValue) => {
       await apiSetVote(eventId, userId, status);
       await reload();
     },
     [userId, reload],
+  );
+
+  const setMemberVote = useCallback(
+    async (eventId: string, targetUserId: string, status: VoteValue) => {
+      await apiSetMemberVote(eventId, targetUserId, status);
+      await reload();
+    },
+    [reload],
   );
 
   const setMyName = useCallback(
@@ -144,7 +162,9 @@ export function useBandRoster(bandId: string, userId: string) {
     assignNaipe,
     setRole,
     removeMember,
+    setNaipeResponsavel,
     vote,
+    setMemberVote,
     setMyName,
   };
 }

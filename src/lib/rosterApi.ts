@@ -4,6 +4,7 @@ import type { VoteValue } from '@/types';
 export interface Naipe {
   id: string;
   name: string;
+  responsavelId: string | null;
 }
 export interface BandMemberRow {
   userId: string;
@@ -24,15 +25,42 @@ export interface AttendanceRow {
 export async function fetchNaipes(bandId: string): Promise<Naipe[]> {
   const { data, error } = await supabase
     .from('naipes')
-    .select('id, name')
+    .select('id, name, responsavel_id')
     .eq('band_id', bandId)
     .order('name');
   if (error) throw error;
-  return data as Naipe[];
+  return (data as { id: string; name: string; responsavel_id: string | null }[]).map((n) => ({
+    id: n.id,
+    name: n.name,
+    responsavelId: n.responsavel_id,
+  }));
 }
 
 export async function createNaipe(bandId: string, name: string): Promise<void> {
   const { error } = await supabase.from('naipes').insert({ band_id: bandId, name });
+  if (error) throw error;
+}
+
+/** Direção define (ou limpa) o responsável de um naipe. */
+export async function setNaipeResponsavel(naipeId: string, userId: string | null): Promise<void> {
+  const { error } = await supabase
+    .from('naipes')
+    .update({ responsavel_id: userId })
+    .eq('id', naipeId);
+  if (error) throw error;
+}
+
+/** Marca a presença de um membro (direção ou responsável do naipe), via RPC segura. */
+export async function setMemberVote(
+  eventId: string,
+  userId: string,
+  status: VoteValue,
+): Promise<void> {
+  const { error } = await supabase.rpc('set_member_vote', {
+    p_event: eventId,
+    p_user: userId,
+    p_status: status,
+  });
   if (error) throw error;
 }
 

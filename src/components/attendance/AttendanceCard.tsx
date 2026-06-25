@@ -14,6 +14,9 @@ interface Props {
   entries: AttendanceEntry[];
   myStatus?: VoteValue;
   onVote: (eventId: string, status: VoteValue) => void;
+  /** userIds cuja presença o utilizador atual pode marcar (responsável/direção). */
+  manageableIds?: Set<string>;
+  onSetEntry?: (eventId: string, userId: string, status: VoteValue) => void;
 }
 
 const TAG: Record<VoteValue, { bg: string; fg: string; label: string }> = {
@@ -22,12 +25,29 @@ const TAG: Record<VoteValue, { bg: string; fg: string; label: string }> = {
   talvez: { bg: 'var(--wbg)', fg: 'var(--warn)', label: 'talvez' },
 };
 
-export function AttendanceCard({ event, entries, myStatus, onVote }: Props) {
+const MINI: { status: VoteValue; icon: string; cls: keyof typeof styles }[] = [
+  { status: 'sim', icon: '✓', cls: 'miniSim' },
+  { status: 'nao', icon: '✗', cls: 'miniNao' },
+  { status: 'talvez', icon: '?', cls: 'miniTal' },
+];
+
+export function AttendanceCard({
+  event,
+  entries,
+  myStatus,
+  onVote,
+  manageableIds,
+  onSetEntry,
+}: Props) {
   const sim = entries.filter((e) => e.status === 'sim').length;
   const nao = entries.filter((e) => e.status === 'nao').length;
   const talvez = entries.filter((e) => e.status === 'talvez').length;
   const isPast = event.date < todayStr;
   const bi = bandInfo(event.band);
+
+  const canManage = !isPast && !!manageableIds && !!onSetEntry;
+  const managed = canManage ? entries.filter((e) => manageableIds!.has(e.userId)) : [];
+  const others = canManage ? entries.filter((e) => !manageableIds!.has(e.userId)) : entries;
 
   return (
     <div className={`${styles.pollCard} ${isPast ? styles.past : ''}`}>
@@ -72,9 +92,30 @@ export function AttendanceCard({ event, entries, myStatus, onVote }: Props) {
         </div>
       )}
 
-      {entries.length > 0 && (
+      {managed.length > 0 && (
+        <div className={styles.manageList}>
+          {managed.map((e) => (
+            <div key={e.userId} className={styles.manageRow}>
+              <span className={styles.manageName}>{e.name || 'Sem nome'}</span>
+              <div className={styles.manageBtns}>
+                {MINI.map((b) => (
+                  <button
+                    key={b.status}
+                    className={`${styles.miniBtn} ${e.status === b.status ? styles[b.cls] : ''}`}
+                    onClick={() => onSetEntry!(event.id, e.userId, b.status)}
+                  >
+                    {b.icon}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {others.length > 0 && (
         <div className={styles.memberVotes}>
-          {entries.map((e) => {
+          {others.map((e) => {
             const t = e.status ? TAG[e.status] : null;
             return (
               <span

@@ -116,3 +116,65 @@
   border-radius: 999px;
   font-weight: 700;
 }
+
+/* Gestão da assiduidade (responsável de naipe / direção) */
+.manageList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.manageRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.manageName {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.manageBtns {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.miniBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  color: var(--text3);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.miniSim {
+  background: var(--sbg);
+  color: var(--success);
+  border-color: var(--success);
+}
+
+.miniNao {
+  background: var(--dbg);
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.miniTal {
+  background: var(--wbg);
+  color: var(--warn);
+  border-color: var(--warn);
+}
