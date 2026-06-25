@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { AgendaEvent } from '@/types';
 import { todayStr } from '@/lib/date';
+import { exportAttendancePDF } from '@/lib/pdf';
 import { useBandRoster } from '@/hooks/useBandRoster';
 import { AttendanceCard, type AttendanceEntry } from './AttendanceCard';
 import styles from './Attendance.module.css';
@@ -32,6 +33,30 @@ export function AttendanceTab({ events, bandId, userId }: Props) {
     }
   }
 
+  function exportPdf() {
+    const ids =
+      filter === ALL ? members.map((m) => m.userId) : [...(naipeMembers[filter] ?? new Set<string>())];
+    const scope = filter === ALL ? 'Toda a banda' : naipes.find((n) => n.id === filter)?.name ?? 'Naipe';
+    const sortNames = (a: string, b: string) => a.localeCompare(b);
+    const events = upcoming.map((ev) => {
+      const entries = ids.map((uid) => ({
+        name: nameById.get(uid) || 'Sem nome',
+        status: attendance[ev.id]?.[uid],
+      }));
+      const pick = (s: string) => entries.filter((e) => e.status === s).map((e) => e.name).sort(sortNames);
+      return {
+        name: ev.name || ev.type,
+        date: ev.date,
+        location: ev.location,
+        sim: pick('sim'),
+        nao: pick('nao'),
+        talvez: pick('talvez'),
+        pendente: entries.filter((e) => !e.status).map((e) => e.name).sort(sortNames),
+      };
+    });
+    exportAttendancePDF({ scope, events });
+  }
+
   if (loading) return <div className="content">A carregar assiduidade…</div>;
 
   const scopeIds =
@@ -49,6 +74,9 @@ export function AttendanceTab({ events, bandId, userId }: Props) {
             </option>
           ))}
         </select>
+        <button className={styles.pdfBtn} onClick={exportPdf} title="Exportar PDF">
+          📄 PDF
+        </button>
       </div>
 
       {upcoming.length === 0 && (

@@ -85,3 +85,22 @@
 .filterRow select {
   flex: 1;
 }
+
+.pdfBtn {
+  flex-shrink: 0;
+  border: 0.5px solid var(--border2);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text2);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 12px;
+  min-height: 38px;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.pdfBtn:hover {
+  filter: brightness(0.97);
+}
