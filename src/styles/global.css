@@ -1,22 +1,34 @@
 :root {
-  --bg: #f0f4f8;
-  --card: #fff;
-  --text: #1a202c;
-  --text2: #718096;
-  --text3: #a0aec0;
-  --border: rgba(0, 0, 0, 0.09);
-  --border2: rgba(0, 0, 0, 0.18);
-  --primary: #185fa5;
-  --pbg: #e6f1fb;
+  /* Cores */
+  --bg: #eef2f7;
+  --card: #ffffff;
+  --surface: #f4f7fb;
+  --text: #16212e;
+  --text2: #5b6878;
+  --text3: #97a3b1;
+  --border: rgba(16, 33, 54, 0.08);
+  --border2: rgba(16, 33, 54, 0.16);
+  --primary: #1d5fa6;
+  --primary-ink: #ffffff;
+  --pbg: #e7f0fb;
   --success: #0a6641;
   --sbg: #dcf5eb;
-  --danger: #943515;
+  --danger: #a3371a;
   --dbg: #fae9e3;
   --warn: #7a4600;
   --wbg: #faeeda;
-  --r: 8px;
-  --rl: 12px;
-  --shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+
+  /* Forma & profundidade */
+  --r: 10px;
+  --rl: 14px;
+  --rxl: 22px;
+  --shadow-sm: 0 1px 2px rgba(16, 33, 54, 0.06);
+  --shadow: 0 3px 10px -2px rgba(16, 33, 54, 0.1);
+  --shadow-lg: 0 18px 44px -14px rgba(16, 33, 54, 0.24);
+
+  /* Safe areas (PWA instalada / notch) */
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
 }
 
 * {
@@ -26,31 +38,58 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
-  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.45;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
 }
 
 #root {
-  max-width: 480px;
+  max-width: 520px;
   margin: 0 auto;
-  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--card);
 }
 
-/* Estilos partilhados de formulário usados por vários módulos */
+/* Tablet/desktop: coluna enquadrada sobre fundo suave. */
+@media (min-width: 600px) {
+  body {
+    background: linear-gradient(180deg, #eef2f7 0%, #dde6f0 100%);
+    background-attachment: fixed;
+  }
+  #root {
+    min-height: 100dvh;
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+/* Desktop largo: painel alarga para acomodar o layout de duas colunas (sidebar + conteúdo). */
+@media (min-width: 880px) {
+  #root {
+    max-width: 1180px;
+  }
+}
+
+/* ---- Formulários ---- */
 input,
 select,
 textarea {
   width: 100%;
-  padding: 8px 10px;
-  border: 0.5px solid var(--border2);
+  padding: 11px 12px;
+  border: 1px solid var(--border2);
   border-radius: var(--r);
-  background: var(--bg);
+  background: var(--surface);
   color: var(--text);
   font-family: inherit;
-  font-size: 13px;
+  font-size: 16px; /* 16px evita o zoom automático no iOS */
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
@@ -59,7 +98,7 @@ input:focus,
 select:focus,
 textarea:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(24, 95, 165, 0.12);
+  box-shadow: 0 0 0 3px rgba(29, 95, 166, 0.14);
 }
 
 textarea {
@@ -67,36 +106,40 @@ textarea {
   line-height: 1.5;
 }
 
-/* Botões partilhados (modal + setup de grupo) */
-.btn-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
-}
-
+/* ---- Botões ---- */
 .btn {
-  flex: 1;
-  padding: 9px 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 14px;
   border: none;
   border-radius: var(--r);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  transition: filter 0.15s;
+  gap: 6px;
+  transition: filter 0.15s, transform 0.05s;
 }
 
 .btn:hover {
-  filter: brightness(0.95);
+  filter: brightness(0.97);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
 .btn-primary {
-  background: var(--pbg);
-  color: var(--primary);
+  background: var(--primary);
+  color: var(--primary-ink);
 }
 
 .btn-danger {
@@ -105,68 +148,81 @@ textarea {
 }
 
 .btn-secondary {
-  background: var(--bg);
-  color: var(--text2);
+  background: var(--surface);
+  color: var(--text);
   border: 0.5px solid var(--border2);
 }
 
-/* Campos de formulário partilhados */
+.btn-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.btn-row .btn {
+  width: auto;
+  flex: 1;
+}
+
+/* ---- Campos ---- */
 .field {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .field label {
   font-size: 11px;
   font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   color: var(--text2);
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
 }
 
 .row2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 10px;
 }
 
-/* Cartão e estados partilhados */
+/* ---- Cartões & estados ---- */
 .card {
   background: var(--card);
   border-radius: var(--rl);
   border: 0.5px solid var(--border);
-  padding: 12px 14px;
-  margin-bottom: 8px;
-  box-shadow: var(--shadow);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
 }
 
 .card-title {
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 800;
   color: var(--text);
   margin-bottom: 10px;
 }
 
 .empty-state {
   text-align: center;
-  padding: 32px 16px;
+  padding: 40px 20px;
   color: var(--text2);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.7;
 }
 
 .empty-icon {
-  font-size: 36px;
-  margin-bottom: 10px;
+  font-size: 40px;
+  margin-bottom: 12px;
 }
 
 .content {
-  padding: 8px 8px 90px;
+  padding: 12px 12px calc(36px + var(--safe-b));
 }
 
 .date-badge {
   font-size: 10px;
   font-weight: 700;
-  padding: 1px 8px;
-  border-radius: 10px;
+  padding: 2px 9px;
+  border-radius: 999px;
   flex-shrink: 0;
 }

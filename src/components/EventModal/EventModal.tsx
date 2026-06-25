@@ -11,6 +11,8 @@ interface EventModalProps {
   onSave: (data: Omit<AgendaEvent, 'id'> & { id?: string | null }) => void;
   onDelete: (id: string) => void;
   onClose: () => void;
+  /** Quando true, o evento é apenas visualizável (membros sem permissão de gestão). */
+  readOnly?: boolean;
 }
 
 const KNOWN_BAND_NAMES = BANDS.map((b) => b.name);
@@ -61,7 +63,14 @@ function initForm(event: AgendaEvent | null, defaultDate: string): FormState {
   };
 }
 
-export function EventModal({ event, defaultDate, onSave, onDelete, onClose }: EventModalProps) {
+export function EventModal({
+  event,
+  defaultDate,
+  onSave,
+  onDelete,
+  onClose,
+  readOnly = false,
+}: EventModalProps) {
   const [form, setForm] = useState<FormState>(() => initForm(event, defaultDate));
   const isEditing = event !== null;
 
@@ -98,7 +107,11 @@ export function EventModal({ event, defaultDate, onSave, onDelete, onClose }: Ev
   }
 
   return (
-    <ModalShell title={isEditing ? 'Editar Evento' : 'Novo Evento'} onClose={onClose}>
+    <ModalShell
+      title={readOnly ? 'Evento' : isEditing ? 'Editar Evento' : 'Novo Evento'}
+      onClose={onClose}
+    >
+      <fieldset disabled={readOnly} style={{ border: 'none', padding: 0, margin: 0 }}>
       <div className="field">
         <label>Banda</label>
         <select value={form.band} onChange={(e) => set('band', e.target.value)}>
@@ -191,11 +204,15 @@ export function EventModal({ event, defaultDate, onSave, onDelete, onClose }: Ev
         />
       </div>
 
+      </fieldset>
+
       <div className="btn-row">
-        <button className="btn btn-primary" onClick={handleSave}>
-          💾 Guardar
-        </button>
-        {isEditing && (
+        {!readOnly && (
+          <button className="btn btn-primary" onClick={handleSave}>
+            💾 Guardar
+          </button>
+        )}
+        {!readOnly && isEditing && (
           <button className="btn btn-danger" onClick={handleDelete}>
             🗑 Apagar
           </button>

@@ -1,0 +1,55 @@
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 6px 12px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.signout {
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.bandRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  border-top: 0.5px solid var(--border);
+  padding: 11px 2px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.bandRow:first-of-type {
+  border-top: none;
+}
+
+.bandName {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.error {
+  font-size: 12px;
+  color: var(--danger);
+  padding: 0 6px 8px;
+}
+
+.wrap {
+  max-width: 460px;
+  margin: 0 auto;
+}

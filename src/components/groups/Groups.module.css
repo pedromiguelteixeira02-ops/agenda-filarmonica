@@ -1,138 +1,45 @@
-.intro {
-  font-size: 12px;
-  color: var(--text2);
-  line-height: 1.7;
-  margin-bottom: 14px;
-}
+/* Estilos partilhados pelos cartões de assiduidade (AttendanceCard). */
 
-.setupBtns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.setupPanel {
-  margin-top: 12px;
-}
-
-.codeInput {
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  font-family: monospace;
-  font-weight: 700;
-}
-
-.codeDisplay {
-  font-family: monospace;
-  font-weight: 900;
-  font-size: 22px;
-  color: var(--primary);
-  letter-spacing: 4px;
-  text-align: center;
-  background: var(--pbg);
-  border-radius: var(--r);
-  padding: 10px;
-  margin: 8px 0;
-  border: 0.5px dashed rgba(24, 95, 165, 0.3);
-  cursor: pointer;
-  user-select: all;
-}
-
-.copyNotice {
-  text-align: center;
-  font-size: 10px;
-  color: var(--text3);
-  margin-top: 3px;
-}
-
-.groupTip {
-  background: var(--bg);
-  border-radius: var(--r);
-  padding: 8px 10px;
-  font-size: 11px;
-  color: var(--text2);
-  line-height: 1.5;
-}
-
-.groupName {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 3px;
-}
-
-.groupMeta {
-  font-size: 11px;
-  color: var(--text2);
-  margin-bottom: 2px;
-}
-
-.votingAs strong {
-  color: var(--text);
-}
-
-.leaveBtn {
-  border: 0.5px solid var(--border2);
-  border-radius: var(--r);
-  background: none;
-  padding: 7px 20px;
-  cursor: pointer;
-  font-size: 12px;
-  color: var(--text2);
-  font-family: inherit;
-  font-weight: 600;
-}
-
-.leaveBtn:hover {
-  background: var(--dbg);
-  color: var(--danger);
-  border-color: var(--danger);
-}
-
-.leaveWrap {
-  text-align: center;
-  padding: 16px 0;
-}
-
-/* Poll card */
 .pollCard {
   background: var(--card);
   border-radius: var(--rl);
   border: 0.5px solid var(--border);
-  padding: 10px 12px;
-  margin-bottom: 6px;
-  box-shadow: var(--shadow);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow-sm);
 }
 
 .past {
-  opacity: 0.5;
+  opacity: 0.55;
 }
 
 .pollHeader {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 8px;
   margin-bottom: 3px;
 }
 
 .pollName {
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
   color: var(--text);
 }
 
 .pollSub {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text2);
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 
 .tally {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  margin: 5px 0;
+  margin: 7px 0;
 }
 
 .tSim {
@@ -148,7 +55,7 @@
 }
 
 .pastNote {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--text3);
   font-style: italic;
 }
@@ -156,21 +63,26 @@
 .voteGrid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 4px;
-  margin-top: 6px;
+  gap: 6px;
+  margin-top: 8px;
 }
 
 .voteBtn {
-  padding: 6px 2px;
+  min-height: 40px;
+  padding: 8px 4px;
   border-radius: var(--r);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  border: 0.5px solid var(--border);
-  background: var(--bg);
+  border: 1px solid var(--border2);
+  background: var(--surface);
   color: var(--text2);
   font-family: inherit;
   transition: all 0.15s;
+}
+
+.voteBtn:active {
+  transform: translateY(1px);
 }
 
 .sSim {
@@ -194,13 +106,13 @@
 .memberVotes {
   display: flex;
   flex-wrap: wrap;
-  gap: 3px;
-  margin-top: 6px;
+  gap: 4px;
+  margin-top: 8px;
 }
 
 .memberTag {
-  font-size: 9px;
-  padding: 1px 6px;
-  border-radius: 4px;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
   font-weight: 700;
 }

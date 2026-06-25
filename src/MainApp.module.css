@@ -1,0 +1,74 @@
+.main {
+  min-width: 0;
+}
+
+/* Desktop largo: duas colunas (sidebar + conteúdo). O topo mobile esconde-se. */
+@media (min-width: 880px) {
+  .layout {
+    display: grid;
+    grid-template-columns: 248px minmax(0, 1fr);
+    align-items: start;
+  }
+  .mobileTop {
+    display: none;
+  }
+  .main {
+    padding: 8px 12px;
+  }
+}
+
+.bandBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: max(8px, var(--safe-t)) 16px 8px;
+  background: var(--surface);
+  border-bottom: 0.5px solid var(--border);
+}
+
+.bandInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.bandName {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.code {
+  font-size: 10px;
+  color: var(--text3);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.actions button {
+  background: var(--card);
+  border: 0.5px solid var(--border2);
+  border-radius: 999px;
+  padding: 6px 12px;
+  min-height: 32px;
+  color: var(--text2);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: filter 0.15s;
+}
+
+.actions button:hover {
+  filter: brightness(0.97);
+}

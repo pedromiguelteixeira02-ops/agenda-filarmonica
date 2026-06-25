@@ -23,19 +23,4 @@ export interface Band {
 
 export type VoteValue = 'sim' | 'nao' | 'talvez';
 
-/** votos[eventId][memberName] = voto */
-export type GroupVotes = Record<string, Record<string, VoteValue>>;
-
-export interface Group {
-  name: string;
-  code: string;
-  members: string[];
-  votes: GroupVotes;
-}
-
-export interface Session {
-  code: string;
-  member: string;
-}
-
 export type TabId = 'agenda' | 'next' | 'groups';

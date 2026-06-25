@@ -1,0 +1,87 @@
+.hint {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.naipeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-top: 0.5px solid var(--border);
+}
+
+.naipeRow:first-of-type {
+  border-top: none;
+}
+
+.naipeName {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.naipeCount {
+  color: var(--text3);
+  font-weight: 700;
+}
+
+.inBtn,
+.outBtn {
+  border: none;
+  border-radius: var(--r);
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.inBtn {
+  background: var(--sbg);
+  color: var(--success);
+}
+
+.outBtn {
+  background: var(--bg);
+  color: var(--text2);
+  border: 0.5px solid var(--border2);
+}
+
+.addNaipe {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 0.5px solid var(--border);
+}
+
+.addNaipe input {
+  flex: 1;
+}
+
+.addNaipe button {
+  flex-shrink: 0;
+  width: auto;
+  padding: 9px 14px;
+}
+
+.filterRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px 10px;
+}
+
+.filterRow label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text2);
+  flex-shrink: 0;
+}
+
+.filterRow select {
+  flex: 1;
+}
